@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/babel">
+
+  const {
+    useRef,
+    useState,
+    useCallback,
+    useEffect,
+    useContext
+  } = React;
+
+  function useToggle(initVal) {
+    const [on, setOn] = useState(initVal);
+
+    // function toggle(value) {
+    //   if (arguments.length === 0) {
+    //     setOn(!on);
+    //   } else {
+    //     setOn(value);
+    //   }
+    // }
+
+    const ref = useRef();
+    ref.current = on;
+
+    const toggle = useCallback(function (value) {
+      if (typeof value === "boolean") {
+        setOn(value);
+      } else {
+        setOn(!ref.current);
+      }
+    }, []);
+
+    return [on, toggle];
+  }
+
+  function Toggle() {
+    const [on, toggle] = useToggle(false);
+
+    return (
+      <div>
+        isOn: {on ? "ON" : "OFF"}
+        <button onClick={toggle}>Click me to toggle status</button>
+      </div>
+    );
+  }
+
+  function useMount(onMount) {
+    useEffect(() => {
+      onMount();
+    }, []); // 空依赖数组确保只运行一次
+  }
+
+  function useUnmount(onUnmount) {
+    useEffect(() => {
+      return () => {
+        onUnmount();
+      }
+    });
+  }
+
+  function useInput(initVal) {
+    const [value, setValue] = useState(initVal);
+
+    const onChange = useCallback(function (e) {
+      setValue(e.target.value);
+    }, []);
+
+    return {value, onChange};
+  }
+
+  function useArray(initArr) {
+    const [arr, setArr] = useState(initArr);
+
+    const arrRef = useRef();
+    arrRef.current = arr;
+
+    const push = useCallback(function (val) {
+      setArr([...arrRef.current, val]);
+    }, []);
+
+    const clear = useCallback(function () {
+      setArr([]);
+    }, []);
+
+    return {push, clear};
+  }
+
+  function useInterval(cb, duration) {
+    const ref = useRef();
+    ref.current = cb;
+
+    useEffect(() => {
+      let id = setInterval(() => {
+        let f = ref.current; // 将函数读出来，确保该函数在全局下运行
+        f();
+      });
+      return () => clearInterval(id);
+    }, [duration]); // 当duration发生变化时，重新运行一次
+  }
+
+  function useDebounce(cb, duration) {
+    const ref = useRef();
+    ref.current = cb;
+    const timerRef = useRef();
+
+    const func = useCallback((...args) => {
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        const cb = ref.current;
+        cb(...args);
+      }, duration);
+    }, [duration]);
+
+    return func;
+  }
+
+  ReactDOM.render(
+    <Toggle />,
+    document.getElementById("app")
+  );
+</script>
+</body>
+</html>

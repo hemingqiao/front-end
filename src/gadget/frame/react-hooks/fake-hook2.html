@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="app">
+
+  </div>
+
+  <script type="text/babel">
+    const {useState, useEffect, useCallback, useRef, Component} = React;
+
+    /*function App() {
+      const [num, setNum] = useState(0);
+
+      useEffect(() => {
+        setNum(num + 1);
+        console.log(num);
+
+        setNum(num + 1);
+        console.log(num);
+
+        let timer = () => {
+          setNum(num + 1);
+          console.log(num);
+
+          setNum(num + 1);
+          console.log(num);
+        };
+
+        let id = setTimeout(timer, 0);
+
+        return () => clearTimeout(id);
+      }, []);
+
+      return (
+        <div>
+          {num}
+        </div>
+      );
+    }*/
+
+    /*class App extends Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          val: 0
+        };
+      }
+
+      componentDidMount() {
+        this.setState({val: this.state.val + 1});
+        console.log(this.state.val); // 0
+
+        this.setState({val: this.state.val + 1});
+        console.log(this.state.val); // 0
+
+        setTimeout(() => {
+          this.setState({val: this.state.val + 1});
+          console.log(this.state.val); // 2
+
+          this.setState({val: this.state.val + 1});
+          console.log(this.state.val); // 3
+        });
+      }
+
+      render() {
+        return (
+          <div>
+            {this.state.val}
+          </div>
+        );
+      }
+    }*/
+
+    function useDebounce(callback, duration) {
+      const cbRef = useRef();
+      cbRef.current = callback;
+      const timerRef = useRef();
+
+      let func = useCallback((...args) => {
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          cbRef.current(...args);
+        }, duration);
+      }, [duration]);
+
+      return func;
+    }
+
+    function App() {
+      const [count, setCount] = useState(0);
+      const onMove = useCallback(() => {
+        console.log("move");
+        setCount(Math.random());
+      }, []);
+      const debouncedFunc = useDebounce(onMove, 1000);
+
+      return (
+        <div
+          onMouseMove={debouncedFunc}
+          style={{height: "600px", border: "1px solid"}}
+        >
+          {count}
+        </div>
+      );
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+  </script>
+</body>
+</html>

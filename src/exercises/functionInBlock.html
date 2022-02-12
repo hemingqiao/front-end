@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function foo() {
+            console.log("I am outside.")
+        }
+
+        (function () {
+            if (false) {
+                // 重复声明一次foo函数
+                function foo() {
+                    console.log("I am inside.");
+                }
+            }
+
+            foo();
+        })();
+    </script>
+</body>
+
+</html>

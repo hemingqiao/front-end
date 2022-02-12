@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    input:hover {
+      /*background-color: navy;*/
+    }
+  </style>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/babel">
+  const {useState, useEffect, useCallback, useRef, useMemo, useContext} = React;
+
+  function useHover() {
+    const [isHover, setIsHover] = useState(false);
+    const hoverRef = useRef();
+
+    useEffect(() => {
+      function onEnter() {
+        setIsHover(true);
+      }
+
+      function onLeave() {
+        setIsHover(false);
+      }
+
+      hoverRef.current.addEventListener("mouseenter", onEnter);
+      hoverRef.current.addEventListener("mouseleave", onLeave);
+
+      return () => {
+        hoverRef.removeEventListener("mouseenter", onEnter);
+        hoverRef.removeEventListener("mouseleave", onLeave);
+      };
+    }, []);
+
+    return [hoverRef, isHover];
+  }
+
+  function useToggle() {
+    const [on, setOn] = useState(false);
+    const onRef = useRef();
+    onRef.current = on;
+
+    const toggle = useCallback(() => {
+      setOn(!onRef.current);
+    }, []);
+
+    console.log(toggle);
+
+    return [on, toggle];
+  }
+
+  function useMount(onMount) {
+    useEffect(() => {
+      onMount();
+    });
+  }
+
+  function useUnMount(onUnMount) {
+    useEffect(() => {
+      return () => {
+        onUnMount();
+      }
+    });
+  }
+
+  function useInput(init) {
+    const [value, setValue] = useState(init);
+
+    const onChange = useCallback((e) => {
+      setValue(e.target.value);
+    }, []);
+
+    return [value, onChange];
+  }
+
+  function useArray(initArr) {
+    const [arr, setArr] = useState(initArr);
+    const arrRef = useRef();
+    arrRef.current = arr;
+
+    const push = useCallback((...args) => {
+      setArr(arrRef.current.concat(args));
+      return arrRef.current.length + args.length;
+    }, []);
+
+    const pop = useCallback(() => {
+      setArr(arrRef.current.slice(0, -1));
+      return arrRef.current[arrRef.current.length - 1];
+    }, []);
+
+    const shift = useCallback(() => {
+      setArr(arrRef.current.slice(1));
+      return arrRef.current[0];
+    }, []);
+
+    const unshift = useCallback((...args) => {
+      setArr(args.concat(arrRef.current));
+      return arrRef.current.length + args.length;
+    }, []);
+
+    return {arr, push, pop, shift, unshift };
+  }
+
+  /*
+  function useDebounce(callback, duration) {
+    const ref = useRef();
+    ref.current = callback;
+    const idRef = useRef();
+
+    const func = useCallback((...args) => {
+      clearTimeout(idRef.current);
+      idRef.current = setTimeout(() => {
+        ref.current(...args);
+      }, duration);
+    }, [duration]);
+
+    return func;
+  }
+
+  function useMousePos() {
+    const [pos, setPos] = useState({x: 0, y: 0});
+    const onMove = useCallback((e) => {
+      console.log(e.clientX, e.clientY);
+      setPos({
+        x: e.clientX,
+        y: e.clientY
+      });
+    }, []);
+    const debouncedFunc = useDebounce(onMove, 500);
+
+    useEffect(() => {
+      window.addEventListener("mousemove", debouncedFunc);
+      return () => window.removeEventListener("mousemove", debouncedFunc);
+    }, []);
+
+    return pos;
+  }
+  */
+
+
+  function useThrottle(callback, duration) {
+    const timerRef = useRef(null);
+    const cbRef = useRef();
+    cbRef.current = callback;
+
+    const func = useCallback((...args) => {
+      if (!timerRef.current) {
+        timerRef.current = setTimeout(() => {
+          cbRef.current(...args);
+          timerRef.current = null;
+        }, duration);
+      }
+    }, [duration]);
+
+    return func;
+  }
+
+  function useMousePos() {
+    const [pos, setPos] = useState({x: 0, y: 0});
+
+    const onMove = useCallback((e) => {
+      console.log(e.clientX, e.clientY, new Date().toString()); // debug
+      setPos({
+        x: e.clientX,
+        y: e.clientY
+      });
+    }, []);
+
+    const throttledFunc = useThrottle(onMove, 1000);
+    useEffect(() => {
+      window.addEventListener("mousemove", throttledFunc);
+      return () => window.removeEventListener("mousemove", throttledFunc);
+    }, []);
+
+    console.log("pos", pos);
+    return pos;
+  }
+
+  function useInterval(callback, duration) {
+    const cbRef = useRef();
+    cbRef.current = callback; // 因为可能每次都传入新的callback，所以使用ref来保证每次都是新传入的callback被执行
+    const timerRef = useRef();
+
+    useEffect(() => {
+      clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        cbRef.current();
+      }, duration);
+
+      /*
+      // 错误的写法，cbRef的current的值始终指向新的callback
+      // 但是传给定时器的cbRef.current始终是第一次运行时的current对象
+      timerRef.current = setInterval(cbRef.current, duration);
+      */
+
+      return () => clearInterval(timerRef.current);
+    }, [duration]);
+  }
+
+  function useForceUpdate() {
+    const [a, setA] = useState(0);
+
+    const forceUpdate = useCallback(() => {
+      setA(Math.random());
+    }, []);
+
+    return forceUpdate;
+  }
+
+
+  function App() {
+    const pos = useMousePos();
+    // useInterval(() => console.log(Math.random()), 1000);
+    const forceUpdate = useForceUpdate();
+
+    return (
+      <div>
+        Hello
+        <br/>
+        x: {pos.x}, y: {pos.y}
+        <button onClick={() => forceUpdate()}>click me</button>
+      </div>
+    );
+  }
+
+  ReactDOM.render(
+    <App/>,
+    document.getElementById("app")
+  );
+</script>
+</body>
+</html>

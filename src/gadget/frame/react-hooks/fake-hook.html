@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/babel">
+  const {useState, useEffect, useReducer, useCallback, useRef} = React;
+
+  class MyComponent extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        pos: {x: 0, y: 0},
+        count: 0
+      }
+    }
+
+    mouseMoveListener = (e) => {
+      // console.log(e.target.clientX);
+      this.setState({
+        pos: {x: e.clientX, y: e.clientY}
+      });
+    }
+
+    componentDidMount() {
+      window.addEventListener("mousemove", this.mouseMoveListener)
+    }
+
+    render() {
+      return (
+        <div>
+          pos: x {this.state.pos.x}, y {this.state.pos.y}
+          <br/>
+          count: {this.state.count}
+        </div>
+      );
+    }
+  }
+
+  function CurrentDate() {
+    const [time, setTime] = useState(new Date().toString());
+
+    useEffect(() => {
+      let id = setInterval(() => {
+        setTime(new Date().toString());
+      });
+
+      return () => clearInterval(id);
+    }, []);
+
+    return (
+      <div>{time}</div>
+    );
+  }
+
+  function useWindowSize() {
+    const [size, setSize] = useState({width: 0, height: 0});
+
+    function handleSizeChange() {
+      setSize({width: window.innerWidth, height: window.innerHeight})
+    }
+
+    useEffect(() => {
+      window.addEventListener("resize", handleSizeChange);
+
+      return () => window.removeEventListener("resize", handleSizeChange)
+    }, []);
+
+    return (
+      <div>
+        {size.width}, {size.height}
+      </div>
+    );
+  }
+
+  function Size() {
+    return useWindowSize();
+  }
+
+  function useState2(initVal) {
+    const [state, dispatch] = useReducer(function (state, action) {
+      return action.value;
+    }, initVal);
+
+    let setState = useCallback(function (newVal) {
+      dispatch({
+        type: "changestate",
+        value: newVal
+      });
+    }, []);
+
+    return [state, setState];
+  }
+
+  function useReducer2(reducer, initVal) {
+    const [state, setState] = useState(initVal);
+
+    const ref = useRef();
+    ref.current = state;
+
+    const dispatch = function (action) {
+      let newState = reducer(ref.current, action);
+      setState(newState);
+    };
+
+    return [state, dispatch];
+  }
+
+  ReactDOM.render(
+    <Size />,
+    document.getElementById("app")
+  );
+</script>
+</body>
+</html>

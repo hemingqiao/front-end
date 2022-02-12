@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- 简单的正则校验 -->
+  <style>
+    section {
+      display: flex;
+      flex-flow: column;
+      justify-content: space-around;
+      height: 300px;
+      max-width: 800px;
+      min-width: 400px;
+      margin: 0 auto;
+      padding: 0 100px;
+    }
+
+    section * {
+      min-height: 30px;
+    }
+
+    #error {
+      color: red;
+    }
+
+    #result {
+      line-height: 30px;
+    }
+
+    .info {
+      background:#00c5ff;
+      padding:2px;
+      margin:2px;
+      display:inline-block;
+    }
+  </style>
+</head>
+<body>
+<section>
+  <div id="error"></div>
+  <input type="text" id="regexp" placeholder="请输入正则表达式">
+  <input type="text" id="text" placeholder="请输入测试文本">
+  <button id="run">测试</button>
+  <div id="result"></div>
+</section>
+
+<script>
+  (function () {
+    // 取得对相应DOM元素的引用
+    const regexpInput = document.getElementById("regexp");
+    const textInput = document.getElementById("text");
+    const runBtn = document.getElementById("run");
+    const errorBox = document.getElementById("error");
+    const resultBox = document.getElementById("result");
+
+    runBtn.onclick = function () {
+      // debugger
+      errorBox.innerHTML = "";
+      resultBox.innerHTML = "";
+
+      let textContent = textInput.value;
+      let regexp = regexpInput.value;
+
+      if (regexp === "") {
+        errorBox.innerHTML = "请输入正则表达式";
+      } else if (textContent === "") {
+        errorBox.innerHTML = "请输入测试文本";
+      } else {
+        // 动态生成正则表达式
+        regexp = generateRegExp(regexp);
+        if (!regexp) return;
+        let result;
+        let results = [];
+
+        if (regexp.global) {
+          while (result = regexp.exec(textContent)) {
+            results.push(result);
+          }
+        } else {
+          results.push(regexp.exec(textContent));
+        }
+        if (results[0] === null) {
+          resultBox.innerHTML = "匹配到0个结果";
+          return;
+        }
+        for (let i = results.length - 1; i >= 0; i--) {
+          let result = results[i];
+          let match = result[0];
+          let prefix = textContent.substring(0, result.index);
+          let suffix = textContent.substring(result.index + match.length);
+          // textContent = prefix
+          //   + '<span class="info">'
+          //   + match
+          //   + '</span>'
+          //   + suffix;
+          textContent = `${prefix}<span class="info">${match}</span>${suffix}`;
+
+        }
+        resultBox.innerHTML = "匹配到" + results.length + "个结果:<br>" + textContent;
+      }
+    };
+
+    // 利用构造函数动态生成生成正则表达式
+    function generateRegExp(regexp) {
+      try {
+        // 如果输入中第一个字符为/，需要去除前后的/，如果不去除的话，正则表达式构造函数会将/作为正则的一部分
+        // 如 new RegExp("/\d+/", "g"); 会返回这样一个（无效？）正则：//d+//g
+        if (regexp[0] === "/") {
+          const regexpArray = regexp.split("/");
+          // 移除数组中第一个空字符串
+          regexpArray.shift();
+          const flags = regexpArray.pop();
+          // 位于两个/之间的正则表达式内容中可能还有转义的/，再使用join方法拼接回来
+          regexp = regexpArray.join("/");
+          regexp = new RegExp(regexp, flags);
+        } else {
+          regexp = new RegExp(regexp, "g");
+        }
+        return regexp;
+      } catch (e) {
+        // catch到错误之后输出到控制台
+        console.log(e);
+        errorBox.innerHTML = "无效的正则表达式";
+        return false;
+      }
+    }
+  })();
+</script>
+</body>
+</html>
