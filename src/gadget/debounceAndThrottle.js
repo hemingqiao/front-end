@@ -13,20 +13,20 @@ debounce（防抖）：事件持续触发，但只有在事件停止触发n秒�
  * @returns {function(...[*]=): void}
  */
 function debounce(callback, delay) {
-  let timeout;
+    let timeout;
 
-  return function (...args) {
-    const ctx = this; // 防止this值被改变，实际上下面使用了箭头函数，这一步不再是必须的了
-    if (timeout) {
-      clearTimeout(timeout);
+    return function (...args) {
+        const ctx = this; // 防止this值被改变，实际上下面使用了箭头函数，这一步不再是必须的了
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(
+            () => {
+                callback.apply(ctx, args);
+            },
+            delay
+        );
     }
-    timeout = setTimeout(
-      () => {
-        callback.apply(ctx, args);
-      },
-      delay
-    );
-  }
 }
 
 
@@ -40,45 +40,45 @@ function debounce(callback, delay) {
  * @returns {function(...[*]=): void}
  */
 function debounce(callback, delay, immediate) {
-  let timeout;
+    let timeout;
 
-  return function (...args) {
-    const ctx = this;
-    if (timeout) {
-      clearTimeout(timeout);
+    return function (...args) {
+        const ctx = this;
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        if (immediate) {
+            const callNow = !timeout;
+
+            timeout = setTimeout(
+                () => {
+                    callback.apply(ctx, args);
+                },
+                delay
+            );
+
+            /*
+            // or
+            timeout = setTimeout(
+              () => {
+                timeout = null; // 写成这样也是可以的，但是这样的话回调的执行依赖于再触发一次事件
+              },
+              delay
+            );
+            */
+
+            if (callNow) {
+                callback.apply(ctx, args);
+            }
+        } else {
+            timeout = setTimeout(
+                () => {
+                    callback.apply(ctx, args);
+                },
+                delay
+            );
+        }
     }
-    if (immediate) {
-      const callNow = !timeout;
-
-      timeout = setTimeout(
-        () => {
-          callback.apply(ctx, args);
-        },
-        delay
-      );
-
-      /*
-      // or
-      timeout = setTimeout(
-        () => {
-          timeout = null; // 写成这样也是可以的，但是这样的话回调的执行依赖于再触发一次事件
-        },
-        delay
-      );
-      */
-
-      if (callNow) {
-        callback.apply(ctx, args);
-      }
-    } else {
-      timeout = setTimeout(
-        () => {
-          callback.apply(ctx, args);
-        },
-        delay
-      );
-    }
-  }
 }
 
 
@@ -97,20 +97,20 @@ throttle（防抖）：当事件持续触发时，每n秒执行一次回调。
  * @returns {function(...[*]=): void}
  */
 function throttle(callback, delay) {
-  let timeout;
+    let timeout;
 
-  return function (...args) {
-    const ctx = this;
-    if (!timeout) {
-      timeout = setTimeout(
-        () => {
-          callback.apply(ctx, args);
-          timeout = null;
-        },
-        delay
-      );
+    return function (...args) {
+        const ctx = this;
+        if (!timeout) {
+            timeout = setTimeout(
+                () => {
+                    callback.apply(ctx, args);
+                    timeout = null;
+                },
+                delay
+            );
+        }
     }
-  }
 }
 
 
@@ -123,17 +123,17 @@ function throttle(callback, delay) {
  * @returns {function(...[*]=)}
  */
 function throttle(callback, delay) {
-  let previous = 0;
+    let previous = 0;
 
-  return function (...args) {
-    const ctx = this;
-    const now = +new Date();
+    return function (...args) {
+        const ctx = this;
+        const now = +new Date();
 
-    if (now - previous >= delay) {
-      callback.apply(ctx, args);
-      previous = now;
+        if (now - previous >= delay) {
+            callback.apply(ctx, args);
+            previous = now;
+        }
     }
-  }
 }
 
 
@@ -146,65 +146,65 @@ function throttle(callback, delay) {
  * @returns {function(...[*]=)}
  */
 function throttle(callback, delay) {
-  let ctx, timeout;
-  let previous = 0;
+    let ctx, timeout;
+    let previous = 0;
 
-  // 把定时器的回调写在了返回的函数体外，那么这里就不能使用箭头函数了
-  // 如果使用箭头函数，this值将会绑定throttle函数被调用时的this，并且不可替换
-  const later = function (...args) {
-    callback.apply(ctx, args);
-    timeout = null;
-    previous = +new Date();
-  }
-
-  return function (...args) {
-    ctx = this;
-
-    let now = +new Date();
-    let remaining = delay - (now - previous);
-    if (remaining <= 0) {
-      if (timeout) {
-        clearTimeout(timeout);
+    // 把定时器的回调写在了返回的函数体外，那么这里就不能使用箭头函数了
+    // 如果使用箭头函数，this值将会绑定throttle函数被调用时的this，并且不可替换
+    const later = function (...args) {
+        callback.apply(ctx, args);
         timeout = null;
-      }
-
-      callback.apply(ctx, args);
-      previous = now;
-    } else if (!timeout) {
-      timeout = setTimeout(later, delay, ...args);
+        previous = +new Date();
     }
-  }
+
+    return function (...args) {
+        ctx = this;
+
+        let now = +new Date();
+        let remaining = delay - (now - previous);
+        if (remaining <= 0) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+
+            callback.apply(ctx, args);
+            previous = now;
+        } else if (!timeout) {
+            timeout = setTimeout(later, delay, ...args);
+        }
+    }
 }
 
 
 function throttle(callback, delay) {
-  let timeout;
-  let previous = 0;
+    let timeout;
+    let previous = 0;
 
-  return function (...args) {
-    const ctx = this;
+    return function (...args) {
+        const ctx = this;
 
-    let now = +new Date();
-    let remaining = delay - (now - previous);
-    if (remaining <= 0) {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
+        let now = +new Date();
+        let remaining = delay - (now - previous);
+        if (remaining <= 0) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
 
-      callback.apply(ctx, args);
-      previous = now;
-    } else if (!timeout) {
-      timeout = setTimeout(
-        () => { // 这里使用了箭头函数作为定时器的回调，那么其this值一定绑定到了添加了事件监听器的DOM对象上，下面的apply就不是必须的了
-          callback.apply(ctx, args);
-          timeout = null;
-          previous = +new Date();
-        },
-        delay
-      );
+            callback.apply(ctx, args);
+            previous = now;
+        } else if (!timeout) {
+            timeout = setTimeout(
+                () => { // 这里使用了箭头函数作为定时器的回调，那么其this值一定绑定到了添加了事件监听器的DOM对象上，下面的apply就不是必须的了
+                    callback.apply(ctx, args);
+                    timeout = null;
+                    previous = +new Date();
+                },
+                delay
+            );
+        }
     }
-  }
 }
 
 // 注：上面throttle的第二个版本并不完整，因为并没有设置可以取消首次触发事件立即执行或者取消最后一次触发事件还会执行一次回调的选项。

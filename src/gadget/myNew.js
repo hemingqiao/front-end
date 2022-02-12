@@ -9,14 +9,14 @@
  * @constructor
  */
 function MyNew(Parent) {
-  var obj = Object.create(Parent.prototype);
-  var args = [].slice.call(arguments, 1);
+    var obj = Object.create(Parent.prototype);
+    var args = [].slice.call(arguments, 1);
 
-  var result = Parent.apply(obj, args);
-  // 需要排除掉result为null的可能，因为typeof null返回object
-  // 还可以显示的使用result !== null作为判断条件
-  if (result && (typeof result === "function" || typeof result === "object")) {
-    return result;
-  }
-  return obj;
+    var result = Parent.apply(obj, args);
+    // 需要排除掉result为null的可能，因为typeof null返回object
+    // 还可以显示的使用result !== null作为判断条件
+    if (result && (typeof result === "function" || typeof result === "object")) {
+        return result;
+    }
+    return obj;
 }

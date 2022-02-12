@@ -7,7 +7,7 @@
  * @returns {*}
  */
 function trim(str) {
-  return str.replace(/^\s+|\s+$/g, "");
+    return str.replace(/^\s+|\s+$/g, "");
 }
 
 const str1 = "  HelloWorld   ";
@@ -22,8 +22,8 @@ console.log(trim(str1)); // "HelloWorld"
  * @constructor
  */
 function Trim(str) {
-  return str.replace(/^\s+(.*?)\s+$/g, "$1"); // 捕获组中使用了惰性匹配，否则.*会匹配到最后一个空格之前的所有空格
-  // return str.replace(/^\s+(\w*)\s+$/, "$1");
+    return str.replace(/^\s+(.*?)\s+$/g, "$1"); // 捕获组中使用了惰性匹配，否则.*会匹配到最后一个空格之前的所有空格
+    // return str.replace(/^\s+(\w*)\s+$/, "$1");
 }
 
 console.log(Trim(str1)); // "HelloWorld"
@@ -40,7 +40,7 @@ console.log(Trim(str1)); // "HelloWorld"
  * @returns {string}
  */
 function titleize(str) {
-  return str.toLowerCase().replace(/(?:^|\s)\w/g, match => match.toUpperCase());
+    return str.toLowerCase().replace(/(?:^|\s)\w/g, match => match.toUpperCase());
 }
 
 const str2 = "my Name is heming";

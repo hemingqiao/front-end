@@ -7,18 +7,18 @@ const string = "https://www.baidu.com/s?wd=%E9%95%BF%E6%B1%9F&rsv_spt=1&rsv_iqid
  * @returns {{}}
  */
 function getQueryObj(string) {
-  const source = string.split("?")[1].split("#")[0].split("&");
-  const res = {};
-  source.forEach(value => {
-    let temp = value.split("=");
-    if (!temp[1]) {
-      res[temp[0]] = "";
-    } else {
-      res[temp[0]] = temp[1];
-    }
-  });
+    const source = string.split("?")[1].split("#")[0].split("&");
+    const res = {};
+    source.forEach(value => {
+        let temp = value.split("=");
+        if (!temp[1]) {
+            res[temp[0]] = "";
+        } else {
+            res[temp[0]] = temp[1];
+        }
+    });
 
-  return res;
+    return res;
 }
 
 console.log(getQueryObj(string));

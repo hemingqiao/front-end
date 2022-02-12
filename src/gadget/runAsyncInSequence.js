@@ -8,25 +8,25 @@
  * @returns {Promise<unknown>}
  */
 function randomDelay(i) {
-  const delay = Math.random() * 1000;
-  console.log(`task${i}: delay ${delay}ms`);
+    const delay = Math.random() * 1000;
+    console.log(`task${i}: delay ${delay}ms`);
 
-  return new Promise((resolve, reject) => {
-    setTimeout(
-      () => {
-        switch (i) {
-          case 2:
-            console.log(`rejected ${i}`);
-            reject(i);
-            break;
-          default:
-            console.log(`resolved ${i}`);
-            resolve(i);
-        }
-      },
-      delay
-    );
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(
+            () => {
+                switch (i) {
+                    case 2:
+                        console.log(`rejected ${i}`);
+                        reject(i);
+                        break;
+                    default:
+                        console.log(`resolved ${i}`);
+                        resolve(i);
+                }
+            },
+            delay
+        );
+    });
 }
 
 
@@ -36,16 +36,16 @@ function randomDelay(i) {
  * @param taskNum
  */
 function runAsyncInSequence(taskNum) {
-  // 并发的获取异步任务
-  const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
+    // 并发的获取异步任务
+    const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
 
-  let sequence = Promise.resolve();
-  tasks.forEach(value => {
-    sequence = sequence.then(() => {
-      return value.then(res => console.log(res))
-        .catch(err => console.log(err));
+    let sequence = Promise.resolve();
+    tasks.forEach(value => {
+        sequence = sequence.then(() => {
+            return value.then(res => console.log(res))
+                .catch(err => console.log(err));
+        });
     });
-  });
 }
 
 // test
@@ -75,14 +75,14 @@ runAsyncInSequence(5);
  * @param taskNum
  */
 function runAsyncInSequence(taskNum) {
-  const tasks = Array(taskNum).fill(null).map((v, i) => randomDelay(i));
+    const tasks = Array(taskNum).fill(null).map((v, i) => randomDelay(i));
 
-  tasks.reduce((accumulator, currentValue) => {
-    return accumulator.then(() => {
-      return currentValue.then(res => console.log(res))
-        .catch(err => console.log(err));
-    });
-  }, Promise.resolve());
+    tasks.reduce((accumulator, currentValue) => {
+        return accumulator.then(() => {
+            return currentValue.then(res => console.log(res))
+                .catch(err => console.log(err));
+        });
+    }, Promise.resolve());
 }
 
 // test
@@ -114,28 +114,28 @@ runAsyncInSequence(5);
  * @returns {Promise<[]>}
  */
 async function runAsyncInSequence(taskNum) {
-  const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
-  const now = +new Date();
-  let result = [];
+    const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
+    const now = +new Date();
+    let result = [];
 
-  for (let task of tasks) {
-    try {
-      let res = await task;
-      console.log(res);
-      result.push(res);
-    } catch (e) {
-      console.log(e);
-      result.push(`error ${e}`);
+    for (let task of tasks) {
+        try {
+            let res = await task;
+            console.log(res);
+            result.push(res);
+        } catch (e) {
+            console.log(e);
+            result.push(`error ${e}`);
+        }
     }
-  }
 
-  console.log(`${+new Date() - now}ms elapsed`);
-  return result;
+    console.log(`${+new Date() - now}ms elapsed`);
+    return result;
 }
 
 // test
 runAsyncInSequence(5).then(res => console.log(res))
-  .catch(err => console.log(err));
+    .catch(err => console.log(err));
 
 // log:
 // task0: delay 566.1142871958887ms
@@ -164,28 +164,28 @@ runAsyncInSequence(5).then(res => console.log(res))
  * @returns {Generator<*, [], *>}
  */
 function* runAsyncInSequenceSpawn(taskNum) {
-  const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
-  const now = +new Date();
-  let result = [];
+    const tasks = Array.from(Array(taskNum), (v, k) => randomDelay(k));
+    const now = +new Date();
+    let result = [];
 
-  for (let task of tasks) {
-    try {
-      let res = yield task;
-      console.log(res);
-      result.push(res);
-    } catch (e) {
-      console.log(e);
-      result.push(`error ${e}`);
+    for (let task of tasks) {
+        try {
+            let res = yield task;
+            console.log(res);
+            result.push(res);
+        } catch (e) {
+            console.log(e);
+            result.push(`error ${e}`);
+        }
     }
-  }
 
-  console.log(`${+new Date() - now}ms elapsed`);
-  return result;
+    console.log(`${+new Date() - now}ms elapsed`);
+    return result;
 }
 
 // test
 spawn(runAsyncInSequenceSpawn, 5).then(res => console.log(res))
-  .catch(err => console.log(err));
+    .catch(err => console.log(err));
 
 // log:
 // task0: delay 843.1036376275279ms
@@ -215,38 +215,38 @@ spawn(runAsyncInSequenceSpawn, 5).then(res => console.log(res))
  * @returns {Promise<unknown>}
  */
 function spawn(generator, ...args) {
-  return new Promise((resolve, reject) => {
-    let itr = generator(...args);
+    return new Promise((resolve, reject) => {
+        let itr = generator(...args);
 
-    function step(nextFn) {
-      let iteratorResult;
+        function step(nextFn) {
+            let iteratorResult;
 
-      try {
-        iteratorResult = nextFn();
-      } catch (e) {
-        return reject(e);
-      }
+            try {
+                iteratorResult = nextFn();
+            } catch (e) {
+                return reject(e);
+            }
 
-      if (iteratorResult.done) {
-        return resolve(iteratorResult.value);
-      }
+            if (iteratorResult.done) {
+                return resolve(iteratorResult.value);
+            }
 
-      Promise.resolve(iteratorResult.value).then(
-        res => {
-          step(() => {
-            return itr.next(res);
-          });
-        },
-        err => {
-          step(() => {
-            return itr.throw(err);
-          });
+            Promise.resolve(iteratorResult.value).then(
+                res => {
+                    step(() => {
+                        return itr.next(res);
+                    });
+                },
+                err => {
+                    step(() => {
+                        return itr.throw(err);
+                    });
+                }
+            );
         }
-      );
-    }
 
-    step(() => {
-      return itr.next(null);
+        step(() => {
+            return itr.next(null);
+        });
     });
-  });
 }

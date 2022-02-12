@@ -8,10 +8,10 @@
  * @param args
  */
 function myInterval(cb, delay, ...args) {
-  function inside(...vars) {
-    cb(...vars);
-    setTimeout(inside, delay, ...vars);
-  }
+    function inside(...vars) {
+        cb(...vars);
+        setTimeout(inside, delay, ...vars);
+    }
 
-  setTimeout(inside, delay, ...args);
+    setTimeout(inside, delay, ...args);
 }

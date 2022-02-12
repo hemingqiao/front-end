@@ -8,36 +8,36 @@
  * @returns {Promise<unknown>}
  */
 Promise.myAll = function (iterables) {
-  if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
-    let itrArray = Array.from(iterables),
-        count = 0,
-        result = [],
-        len = itrArray.length;
+    if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
+        let itrArray = Array.from(iterables),
+            count = 0,
+            result = [],
+            len = itrArray.length;
 
-    return new Promise((resolve, reject) => {
-      // 如果长度为零，会同步的返回一个resolved的promise实例
-      if (len === 0) {
-        return resolve(result);
-      } else {
-        for (let [i, v] of itrArray.entries()) {
-          Promise.resolve(v).then(
-            res => {
-              result[i] = res;
-              count++;
-              if (count === len) {
+        return new Promise((resolve, reject) => {
+            // 如果长度为零，会同步的返回一个resolved的promise实例
+            if (len === 0) {
                 return resolve(result);
-              }
-            },
-            err => {
-              return reject(err);
+            } else {
+                for (let [i, v] of itrArray.entries()) {
+                    Promise.resolve(v).then(
+                        res => {
+                            result[i] = res;
+                            count++;
+                            if (count === len) {
+                                return resolve(result);
+                            }
+                        },
+                        err => {
+                            return reject(err);
+                        }
+                    );
+                }
             }
-          );
-        }
-      }
-    });
-  } else {
-    return Promise.reject(new TypeError("parameter is not iterable"));
-  }
+        });
+    } else {
+        return Promise.reject(new TypeError("parameter is not iterable"));
+    }
 }
 
 
@@ -50,29 +50,29 @@ Promise.myAll = function (iterables) {
  * @returns {Promise<unknown>}
  */
 Promise.myRace = function (iterables) {
-  if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
-    let itrArray = Array.from(iterables),
-        len = itrArray.length;
+    if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
+        let itrArray = Array.from(iterables),
+            len = itrArray.length;
 
-    return new Promise((resolve, reject) => {
-      if (len === 0) {
-        return;
-      }
+        return new Promise((resolve, reject) => {
+            if (len === 0) {
+                return;
+            }
 
-      for (let e of itrArray) {
-        Promise.resolve(e).then(
-          res => {
-            return resolve(res);
-          },
-          err => {
-            return reject(err);
-          }
-        );
-      }
-    });
-  } else {
-    return Promise.reject(new TypeError("parameter is not iterable"));
-  }
+            for (let e of itrArray) {
+                Promise.resolve(e).then(
+                    res => {
+                        return resolve(res);
+                    },
+                    err => {
+                        return reject(err);
+                    }
+                );
+            }
+        });
+    } else {
+        return Promise.reject(new TypeError("parameter is not iterable"));
+    }
 }
 
 
@@ -83,43 +83,43 @@ Promise.myRace = function (iterables) {
  * @returns {Promise<unknown>}
  */
 Promise.myAllSettled = function (iterables) {
-  if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
-    const formatResult = (success, val) => success
-      ? {status: "fulfilled", value: val}
-      : {status: "rejected", reason: val};
+    if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
+        const formatResult = (success, val) => success
+            ? {status: "fulfilled", value: val}
+            : {status: "rejected", reason: val};
 
-    let itrArray = Array.from(iterables),
-        count = 0,
-        result = [],
-        len = itrArray.length;
+        let itrArray = Array.from(iterables),
+            count = 0,
+            result = [],
+            len = itrArray.length;
 
-    return new Promise(resolve => {
-      if (len === 0) {
-        return resolve(result);
-      } else {
-        for (let [i, v] of itrArray.entries()) {
-          Promise.resolve(v).then(
-            res => {
-              result[i] = formatResult(true, res);
-              count++;
-              if (count === len) {
+        return new Promise(resolve => {
+            if (len === 0) {
                 return resolve(result);
-              }
-            },
-            err => {
-              result[i] = formatResult(false, err);
-              count++;
-              if (count === len) {
-                return resolve(result);
-              }
+            } else {
+                for (let [i, v] of itrArray.entries()) {
+                    Promise.resolve(v).then(
+                        res => {
+                            result[i] = formatResult(true, res);
+                            count++;
+                            if (count === len) {
+                                return resolve(result);
+                            }
+                        },
+                        err => {
+                            result[i] = formatResult(false, err);
+                            count++;
+                            if (count === len) {
+                                return resolve(result);
+                            }
+                        }
+                    );
+                }
             }
-          );
-        }
-      }
-    });
-  } else {
-    return Promise.reject(new TypeError("parameter is not iterable"));
-  }
+        });
+    } else {
+        return Promise.reject(new TypeError("parameter is not iterable"));
+    }
 }
 
 
@@ -174,35 +174,35 @@ any方法恰好相反，只要有一个Promise实例fulfilled，any方法返回�
  * @return {Promise<unknown>}
  */
 Promise.myAny = function (values) {
-  if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
-    let itrArray = Array.from(values),
-        count = 0,
-        result = [],
-        len = itrArray.length;
+    if (iterables[Symbol.iterator] && typeof iterables[Symbol.iterator] === "function") {
+        let itrArray = Array.from(values),
+            count = 0,
+            result = [],
+            len = itrArray.length;
 
-    return new Promise((resolve, reject) => {
-      if (len === 0) {
-        return reject(new AggregateError(result, "All promises were rejected"));
-      } else {
-        for (let [index, value] of itrArray.entries()) {
-          Promise.resolve(value).then(
-            res => {
-              return resolve(res);
-            },
-            err => {
-              result[index] = err;
-              count++;
-              if (count === len) {
+        return new Promise((resolve, reject) => {
+            if (len === 0) {
                 return reject(new AggregateError(result, "All promises were rejected"));
-              }
+            } else {
+                for (let [index, value] of itrArray.entries()) {
+                    Promise.resolve(value).then(
+                        res => {
+                            return resolve(res);
+                        },
+                        err => {
+                            result[index] = err;
+                            count++;
+                            if (count === len) {
+                                return reject(new AggregateError(result, "All promises were rejected"));
+                            }
+                        }
+                    );
+                }
             }
-          );
-        }
-      }
-    });
-  } else {
-    return Promise.reject(new TypeError("parameter is not iterable"));
-  }
+        });
+    } else {
+        return Promise.reject(new TypeError("parameter is not iterable"));
+    }
 }
 
 
@@ -215,19 +215,19 @@ Promise.myAny = function (values) {
  * @returns {Promise|Promise<unknown>}
  */
 Promise.myResolve = function (value) {
-  if (value instanceof Promise) {
-    return value;
-  }
-
-  return new Promise((resolve, reject) => {
-    if (value && value.then && typeof value.then === "function") {
-      // 如果value是一个thenable对象的话，其then方法会按照出现在脚本中的顺序被加入到微任务队列
-      // 并在本轮事件循环的同步代码执行完后执行，这里使用Promise.prototype.then方法来模拟加入微任务队列这一行为
-      Promise.resolve().then(() => value.then(resolve, reject));
-    } else {
-      return resolve(value);
+    if (value instanceof Promise) {
+        return value;
     }
-  });
+
+    return new Promise((resolve, reject) => {
+        if (value && value.then && typeof value.then === "function") {
+            // 如果value是一个thenable对象的话，其then方法会按照出现在脚本中的顺序被加入到微任务队列
+            // 并在本轮事件循环的同步代码执行完后执行，这里使用Promise.prototype.then方法来模拟加入微任务队列这一行为
+            Promise.resolve().then(() => value.then(resolve, reject));
+        } else {
+            return resolve(value);
+        }
+    });
 }
 
 
@@ -238,9 +238,9 @@ Promise.myResolve = function (value) {
  * @returns {Promise<unknown>}
  */
 Promise.myReject = function (reason) {
-  return new Promise((resolve, reject) => {
-    reject(reason);
-  });
+    return new Promise((resolve, reject) => {
+        reject(reason);
+    });
 }
 
 
@@ -254,16 +254,16 @@ Promise.myReject = function (reason) {
  * @returns {Promise<unknown>}
  */
 Promise.prototype.myFinally = function (callback) {
-  return this.then(
-    res => {
-      Promise.resolve(callback()).then(() => res);
-    },
-    err => {
-      Promise.resolve(callback()).then(() => {
-        throw err;
-      });
-    }
-  );
+    return this.then(
+        res => {
+            Promise.resolve(callback()).then(() => res);
+        },
+        err => {
+            Promise.resolve(callback()).then(() => {
+                throw err;
+            });
+        }
+    );
 }
 
 
@@ -274,7 +274,7 @@ Promise.prototype.myFinally = function (callback) {
  * @returns {Promise<unknown>}
  */
 Promise.prototype.myCatch = function (onrejected) {
-  return this.then(null, onrejected);
+    return this.then(null, onrejected);
 }
 
 
@@ -285,39 +285,39 @@ Promise.prototype.myCatch = function (onrejected) {
  * @param times
  * @return {Promise<unknown>}
  */
-Promise.retry = function(cb, times = 5) {
-  return new Promise(async (resolve, reject) => {
-    let ret;
-    while (times--) {
-      try {
-        ret = await cb();
-        console.log(times);
-        return resolve(ret);
-      } catch(err) {
-        if (times == 0) {
-          return reject(err);
+Promise.retry = function (cb, times = 5) {
+    return new Promise(async (resolve, reject) => {
+        let ret;
+        while (times--) {
+            try {
+                ret = await cb();
+                console.log(times);
+                return resolve(ret);
+            } catch (err) {
+                if (times == 0) {
+                    return reject(err);
+                }
+            }
         }
-      }
-    }
-  });
+    });
 }
 
 function randomPromise() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const n = Math.random();
-      if (n > 0.9) {
-        resolve(n);
-      } else {
-        reject(n);
-      }
-    }, 10);
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const n = Math.random();
+            if (n > 0.9) {
+                resolve(n);
+            } else {
+                reject(n);
+            }
+        }, 10);
+    });
 }
 
 Promise.retry(randomPromise, 100)
-  .then(res => console.log(`result: ${res}`))
-  .catch(err => console.log(`error: ${err}`));
+    .then(res => console.log(`result: ${res}`))
+    .catch(err => console.log(`error: ${err}`));
 
 // 参考：https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/387
 

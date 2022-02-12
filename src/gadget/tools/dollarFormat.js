@@ -2,11 +2,11 @@
 
 /**
  * 格式化数字为特定格式
- * 
- * @param {*} num 
+ *
+ * @param {*} num
  */
 function format(num) {
-  return num.toFixed(2).replace(/\B(?=(\d{3})+\b)/g, ",").replace(/^/, "$ ");
+    return num.toFixed(2).replace(/\B(?=(\d{3})+\b)/g, ",").replace(/^/, "$ ");
 }
 
 const num = 300000;

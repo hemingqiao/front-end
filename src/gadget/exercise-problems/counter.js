@@ -1,28 +1,28 @@
 /* 迭代器的退出行为（和return方法有关） */
 
 class Counter {
-  constructor(limit) {
-    this._count = 1;
-    this._limit = limit;
-  }
+    constructor(limit) {
+        this._count = 1;
+        this._limit = limit;
+    }
 
-  [Symbol.iterator]() {
-    let count = this._count;
-    let limit = this._limit;
+    [Symbol.iterator]() {
+        let count = this._count;
+        let limit = this._limit;
 
-    return {
-      next() {
-        if (count <= limit) {
-          return {value: count++, done: false};
-        }
-        return {done: true};
-      },
-      return() {
-        console.log("Exiting early");
-        return {done: true};
-      }
-    };
-  }
+        return {
+            next() {
+                if (count <= limit) {
+                    return {value: count++, done: false};
+                }
+                return {done: true};
+            },
+            return() {
+                console.log("Exiting early");
+                return {done: true};
+            }
+        };
+    }
 }
 
 // 当解构赋值并未消费可迭代对象的所有值时，迭代器会调用return方法，提前退出
@@ -41,27 +41,27 @@ console.log(set[Symbol.iterator]().return); // undefined
 // 提前退出的行为便会出现
 const arr = [32, 1024, 64];
 Array.prototype[Symbol.iterator] = function () {
-  const ctx = this;
-  let i = 0;
-  let length = ctx.length;
-  return {
-    next() {
-      if (i < length) {
-        return {value: ctx[i++], done: false};
-      }
-      return {done: true};
-    },
+    const ctx = this;
+    let i = 0;
+    let length = ctx.length;
+    return {
+        next() {
+            if (i < length) {
+                return {value: ctx[i++], done: false};
+            }
+            return {done: true};
+        },
 
-    return() {
-      console.log("Exiting early");
-      // return方法必须返回一个有效的 IteratorResult 对象
-      return {done: true};
-    },
+        return() {
+            console.log("Exiting early");
+            // return方法必须返回一个有效的 IteratorResult 对象
+            return {done: true};
+        },
 
-    [Symbol.iterator]() {
-      return this;
-    }
-  };
+        [Symbol.iterator]() {
+            return this;
+        }
+    };
 }
 // const[e, f] = arr; // Exiting early
 
@@ -74,10 +74,10 @@ Array.prototype[Symbol.iterator] = function () {
 
 let iter = arr[Symbol.iterator]();
 for (let i of iter) {
-  console.log(i);
-  if (i > 32) {
-    break;
-  }
+    console.log(i);
+    if (i > 32) {
+        break;
+    }
 }
 
 // 32
@@ -85,7 +85,7 @@ for (let i of iter) {
 // Exiting early
 
 for (let i of iter) {
-  console.log(i);
+    console.log(i);
 }
 
 // 64

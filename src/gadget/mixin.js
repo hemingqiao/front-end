@@ -8,10 +8,10 @@
  * @returns {function(...[*]): *}
  */
 const mixin = obj => (...sources) => sources.reduce(
-  (initObj, currentValue) => {
-    return Object.create(initObj, Object.getOwnPropertyDescriptors(currentValue));
-  },
-  obj
+    (initObj, currentValue) => {
+        return Object.create(initObj, Object.getOwnPropertyDescriptors(currentValue));
+    },
+    obj
 );
 
 
@@ -22,12 +22,12 @@ const mixin = obj => (...sources) => sources.reduce(
  * @returns {{with: (function(...[*]): *)}}
  */
 const mixin = obj => ({
-  with: (...sources) => sources.reduce(
-    (initObj, currentValue) => {
-      return Object.create(initObj, Object.getOwnPropertyDescriptors(currentValue));
-    },
-    obj
-  ),
+    with: (...sources) => sources.reduce(
+        (initObj, currentValue) => {
+            return Object.create(initObj, Object.getOwnPropertyDescriptors(currentValue));
+        },
+        obj
+    ),
 });
 
 
@@ -36,32 +36,32 @@ const mixin = obj => ({
  */
 
 function copyProperty(target, source) {
-  for (let key of Reflect.ownKeys(source)) {
-    if (key !== "constructor"
-      && key !== "prototype"
-      && key !== "name") {
-      let descriptor = Object.getOwnPropertyDescriptor(source, key);
-      Object.defineProperty(target, key, descriptor);
+    for (let key of Reflect.ownKeys(source)) {
+        if (key !== "constructor"
+            && key !== "prototype"
+            && key !== "name") {
+            let descriptor = Object.getOwnPropertyDescriptor(source, key);
+            Object.defineProperty(target, key, descriptor);
+        }
     }
-  }
 }
 
 
 function mix(...Sources) {
-  class Mix {
-    constructor() {
-      for (let Source of Sources) {
-        copyProperty(this, new Source()); // 拷贝实例属性
-      }
+    class Mix {
+        constructor() {
+            for (let Source of Sources) {
+                copyProperty(this, new Source()); // 拷贝实例属性
+            }
+        }
     }
-  }
 
-  for (let Source of Sources) {
-    copyProperty(Mix, Source); // 拷贝静态属性
-    copyProperty(Mix.prototype, Source.prototype); // 拷贝原型属性
-  }
+    for (let Source of Sources) {
+        copyProperty(Mix, Source); // 拷贝静态属性
+        copyProperty(Mix.prototype, Source.prototype); // 拷贝原型属性
+    }
 
-  return Mix;
+    return Mix;
 }
 
 // 用法：class Combined extends mix(A, B, ...) {}

@@ -11,10 +11,10 @@ description: 将一个整数拆分，正序和倒序
  * @return {Generator<Generator<*, void, any>|number|*, void, *>}
  */
 function* getDigit(number) {
-  if (number > 0) {
-    yield* getDigit(number / 10 | 0);
-    yield number % 10;
-  }
+    if (number > 0) {
+        yield* getDigit(number / 10 | 0);
+        yield number % 10;
+    }
 }
 
 console.log([...getDigit(123456789)]);
@@ -25,17 +25,17 @@ console.log([...getDigit(123456789)]);
  * @return {Generator<number, void, *>}
  */
 function* getDigit1(number) {
-  while (number) {
-    yield number % 10;
-    number = number / 10 | 0;
-  }
+    while (number) {
+        yield number % 10;
+        number = number / 10 | 0;
+    }
 }
 
 console.log([...getDigit1(123456789)]);
 
 function* traverse(root) {
-  if (!root) return;
-  yield* traverse(root.left);
-  yield root.val;
-  yield* traverse(root.right);
+    if (!root) return;
+    yield* traverse(root.left);
+    yield root.val;
+    yield* traverse(root.right);
 }

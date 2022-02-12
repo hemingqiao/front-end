@@ -1,49 +1,49 @@
 class Observer {
-  handlers = new Map();
+    handlers = new Map();
 
-  subscribe(type, cb) {
-    if (!this.handlers.has(type)) {
-      this.handlers.set(type, []);
+    subscribe(type, cb) {
+        if (!this.handlers.has(type)) {
+            this.handlers.set(type, []);
+        }
+        this.handlers.get(type).push(cb);
     }
-    this.handlers.get(type).push(cb);
-  }
 
-  publish(type) {
-    if (!this.handlers.has(type)) return;
-    this.handlers.get(type).forEach(cb => cb());
-  }
-
-  // 定义一个取消订阅的函数，需要显式传入订阅的类型和订阅的函数
-  unsubscribe(type, cb) {
-    if (!this.handlers.has(type)) return;
-    const cbs = this.handlers.get(type);
-    for (let i = 0; i < cbs.length; i++) {
-      if (Object.is(cbs[i], cb)) {
-        cbs.splice(i, 1);
-      }
+    publish(type) {
+        if (!this.handlers.has(type)) return;
+        this.handlers.get(type).forEach(cb => cb());
     }
-  }
+
+    // 定义一个取消订阅的函数，需要显式传入订阅的类型和订阅的函数
+    unsubscribe(type, cb) {
+        if (!this.handlers.has(type)) return;
+        const cbs = this.handlers.get(type);
+        for (let i = 0; i < cbs.length; i++) {
+            if (Object.is(cbs[i], cb)) {
+                cbs.splice(i, 1);
+            }
+        }
+    }
 }
 
 class Observer {
-  handlers = new Map();
+    handlers = new Map();
 
-  // 订阅时返回一个取消订阅的函数
-  subscribe(type, cb) {
-    if (!this.handlers.has(type)) {
-      this.handlers.set(type, []);
+    // 订阅时返回一个取消订阅的函数
+    subscribe(type, cb) {
+        if (!this.handlers.has(type)) {
+            this.handlers.set(type, []);
+        }
+        let index = this.handlers.get(type).push(cb);
+
+        return () => {
+            this.handlers.get(type).splice(index, 1);
+        };
     }
-    let index = this.handlers.get(type).push(cb);
 
-    return () => {
-      this.handlers.get(type).splice(index, 1);
-    };
-  }
-
-  publish(type) {
-    if (!this.handlers.has(type)) return;
-    this.handlers.get(type).forEach(cb => cb());
-  }
+    publish(type) {
+        if (!this.handlers.has(type)) return;
+        this.handlers.get(type).forEach(cb => cb());
+    }
 }
 
 let ob = new Observer();

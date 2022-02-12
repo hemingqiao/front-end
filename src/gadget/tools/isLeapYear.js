@@ -6,13 +6,13 @@ description: if语句的使用
 ***************************************************************************** */
 
 const isLeapYear = function (year) {
-  if (year % 400 === 0) {
-    return true;
-  }
-  if (year % 100 === 0) {
-    return false;
-  }
-  return year % 4 === 0;
+    if (year % 400 === 0) {
+        return true;
+    }
+    if (year % 100 === 0) {
+        return false;
+    }
+    return year % 4 === 0;
 }
 
 
@@ -37,16 +37,16 @@ year % 4 === 0 && year % 100 !== 0 会排除掉一部分是闰年的情况：mod
 
 // 1 从覆盖面最小的情况开始排除
 const isLeapYearNew = function (year) {
-  if (year % 3200 === 0) {
-    return false;
-  }
-  if (year % 400 === 0) {
-    return true;
-  }
-  if (year % 100 === 0) {
-    return false;
-  }
-  return year % 4 === 0;
+    if (year % 3200 === 0) {
+        return false;
+    }
+    if (year % 400 === 0) {
+        return true;
+    }
+    if (year % 100 === 0) {
+        return false;
+    }
+    return year % 4 === 0;
 }
 
 // 同样地，因为第一个条件把mod(400) === 0 的情况给排除掉了，所以要补回来，同时第一个条件也把mod(3200) === 0 的情况给排除掉了
@@ -78,39 +78,39 @@ description: 还有一个类似的是fizzbuzz
  * @param {number} n
  * @return {string[]}
  */
-var fizzBuzz = function(n) {
-  const res = [];
-  while (n) {
-    if (n % 3 === 0 && n % 5 === 0) {
-      res.push("FizzBuzz");
-    } else if (n % 5 === 0) {
-      res.push("Buzz");
-    } else if (n % 3 === 0) {
-      res.push("Fizz");
-    } else {
-      res.push(n + "");
+var fizzBuzz = function (n) {
+    const res = [];
+    while (n) {
+        if (n % 3 === 0 && n % 5 === 0) {
+            res.push("FizzBuzz");
+        } else if (n % 5 === 0) {
+            res.push("Buzz");
+        } else if (n % 3 === 0) {
+            res.push("Fizz");
+        } else {
+            res.push(n + "");
+        }
+        n--;
     }
-    n--;
-  }
-  return res.reverse();
+    return res.reverse();
 };
 
 console.log(fizzBuzz(15));
 
 
 const fizzBuzz1 = function (n) {
-  const res = Array.from(Array(n), (v, k) => String(k + 1));
-  for (let i = 0; i < res.length; i++) {
-    let e = res[i]
-    if (e % 3 === 0 && e % 5 === 0) {
-      res[i] = "FizzBuzz";
-    } else if (e % 5 === 0) {
-      res[i] = "Buzz";
-    } else if (e % 3 === 0) {
-      res[i] = "Fizz";
+    const res = Array.from(Array(n), (v, k) => String(k + 1));
+    for (let i = 0; i < res.length; i++) {
+        let e = res[i]
+        if (e % 3 === 0 && e % 5 === 0) {
+            res[i] = "FizzBuzz";
+        } else if (e % 5 === 0) {
+            res[i] = "Buzz";
+        } else if (e % 3 === 0) {
+            res[i] = "Fizz";
+        }
     }
-  }
-  return res;
+    return res;
 }
 
 console.log(fizzBuzz1(15));
@@ -121,16 +121,16 @@ console.log(fizzBuzz1(15));
  * @return {string[]}
  */
 const fizzBuzz2 = function (n) {
-  const res = Array.from(Array(n), (v, k) => String(k + 1));
-  for (let i = 0; i < res.length; i++) {
-    let e = res[i]
-    if (e % 15 === 0) {
-      res[i] = "FizzBuzz";
-    } else if (e % 5 === 0) {
-      res[i] = "Buzz";
-    } else if (e % 3 === 0) {
-      res[i] = "Fizz";
+    const res = Array.from(Array(n), (v, k) => String(k + 1));
+    for (let i = 0; i < res.length; i++) {
+        let e = res[i]
+        if (e % 15 === 0) {
+            res[i] = "FizzBuzz";
+        } else if (e % 5 === 0) {
+            res[i] = "Buzz";
+        } else if (e % 3 === 0) {
+            res[i] = "Fizz";
+        }
     }
-  }
-  return res;
+    return res;
 }

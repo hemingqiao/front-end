@@ -6,15 +6,15 @@
  * @returns {number}
  */
 function sqrt(n) {
-  let x0 = n;
-  let temp = -1;
-  while (Math.abs(x0 * x0 - n) > Number.EPSILON) {
-    temp = (x0 + n / x0) / 2;
-    // 如果在某次循环过后，两次循环中得到的解（x）的值相同，便可以认为得到了精确的解，break掉循环
-    if (x0 === temp) break;
-    x0 = temp;
-  }
-  return x0;
+    let x0 = n;
+    let temp = -1;
+    while (Math.abs(x0 * x0 - n) > Number.EPSILON) {
+        temp = (x0 + n / x0) / 2;
+        // 如果在某次循环过后，两次循环中得到的解（x）的值相同，便可以认为得到了精确的解，break掉循环
+        if (x0 === temp) break;
+        x0 = temp;
+    }
+    return x0;
 }
 
 // test

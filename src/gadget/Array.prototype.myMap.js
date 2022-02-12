@@ -8,17 +8,17 @@
  * @returns {*}
  */
 Array.prototype.myMap = function (callback, thisArg) {
-  return this.reduce((mappedArray, currentValue, index, array) => {
-    mappedArray[index] = callback.call(thisArg, currentValue, index, array);
-    return mappedArray;
-  }, []);
+    return this.reduce((mappedArray, currentValue, index, array) => {
+        mappedArray[index] = callback.call(thisArg, currentValue, index, array);
+        return mappedArray;
+    }, []);
 }
 
 
 // test
 let array = [32, 1024, 64];
 let resultArr = array.myMap((value, index, array) => {
-  return {value: value, index: index, length: array.length};
+    return {value: value, index: index, length: array.length};
 });
 console.log(resultArr);
 
@@ -35,59 +35,58 @@ console.log(resultArr);
 朴素循环实现map
  */
 Array.prototype.myMap = function (callbackFn, thisArg) {
-  let ret = [];
-  for (let [i, v] of this.entries()) {
-    ret.push(callbackFn.call(thisArg, v, i, this));
-  }
-  return ret;
+    let ret = [];
+    for (let [i, v] of this.entries()) {
+        ret.push(callbackFn.call(thisArg, v, i, this));
+    }
+    return ret;
 }
 
 
 /* 简单实现reduce */
 
 Array.prototype.myReduce = function (callbackFn, initValue) {
-  let n = this.length;
-  if (n === 0 && arguments.length === 1) {
-    throw new TypeError("reduce with empty array with no initial value");
-  }
-  if (n === 0 && arguments.length === 2) return initValue;
-  let res = this[0], startIndex = 1;
-  if (arguments.length === 2) {
-    res = initValue;
-    startIndex = 0;
-  }
-  for (let i = startIndex; i < this.length; i++) {
-    res = callbackFn.call(this, res, this[i], i, this);
-  }
-  return res;
+    let n = this.length;
+    if (n === 0 && arguments.length === 1) {
+        throw new TypeError("reduce with empty array with no initial value");
+    }
+    if (n === 0 && arguments.length === 2) return initValue;
+    let res = this[0], startIndex = 1;
+    if (arguments.length === 2) {
+        res = initValue;
+        startIndex = 0;
+    }
+    for (let i = startIndex; i < this.length; i++) {
+        res = callbackFn.call(this, res, this[i], i, this);
+    }
+    return res;
 }
-
 
 
 /* 简单实现forEach */
 
 /**
  * forEach方法只是对数组中的每个元素调用一次回调，不会改变原数组，也没有返回值（返回值为undefined）
- * 
+ *
  * @param callback
  * @param thisArg
  */
 Array.prototype.myForEach = function (callback, thisArg) {
-  for (let i = 0; i < this.length; i++) {
-    callback.call(thisArg, this[i], i, this);
-  }
+    for (let i = 0; i < this.length; i++) {
+        callback.call(thisArg, this[i], i, this);
+    }
 }
 
 const test = [32, 1024, 64];
 test.myForEach((value, index, array) => {
-  console.log(this.name);
-  console.log(value, index, array.length);
+    console.log(this.name);
+    console.log(value, index, array.length);
 }, {name: "customize forEach"});
 
 test.forEach((value, index, array) => {
-  console.log(this.name);
-  console.log(value, index, array.length);
-}, {name:"original forEach"});
+    console.log(this.name);
+    console.log(value, index, array.length);
+}, {name: "original forEach"});
 
 // log
 // undefined

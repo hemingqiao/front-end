@@ -6,8 +6,8 @@ description: 利用二叉搜索树的性质对数组进行排序（生成的二�
 ***************************************************************************** */
 
 function TreeNode(val) {
-  this.val = val;
-  this.left = this.right = null;
+    this.val = val;
+    this.left = this.right = null;
 }
 
 /**
@@ -16,28 +16,28 @@ function TreeNode(val) {
  * @return {TreeNode}
  */
 function arrayToTree(array) {
-  if (!array.length) return new TreeNode(-1);
-  let len = array.length;
-  let root = new TreeNode(array[0]);
-  let nodes = [root];
-  let j = 0; // j指针用来遍历nodes数组
-  for (let i = 1; i < len; i++) {
-    let node = nodes[j];
-    if (array[i] !== null) {
-      let temp = new TreeNode(array[i]);
-      node.left = temp;
-      nodes.push(temp);
+    if (!array.length) return new TreeNode(-1);
+    let len = array.length;
+    let root = new TreeNode(array[0]);
+    let nodes = [root];
+    let j = 0; // j指针用来遍历nodes数组
+    for (let i = 1; i < len; i++) {
+        let node = nodes[j];
+        if (array[i] !== null) {
+            let temp = new TreeNode(array[i]);
+            node.left = temp;
+            nodes.push(temp);
+        }
+        i++;
+        if (i >= len) break;
+        if (array[i] !== null) {
+            let temp = new TreeNode(array[i]);
+            node.right = temp;
+            nodes.push(temp);
+        }
+        j++;
     }
-    i++;
-    if (i >= len) break;
-    if (array[i] !== null) {
-      let temp = new TreeNode(array[i]);
-      node.right = temp;
-      nodes.push(temp);
-    }
-    j++;
-  }
-  return root;
+    return root;
 }
 
 
@@ -47,30 +47,30 @@ function arrayToTree(array) {
  * @return {number[]}
  */
 function treeToArray(root) {
-  const ret = [];
-  if (root === null) return ret;
-  const queue = [root];
-  for (let i = 0; i < queue.length; i++) {
-    let node = queue[i];
-    if (node !== null) {
-      ret.push(node.val);
-      queue.push(node.left);
-      queue.push(node.right);
-    } else {
-      ret.push(null);
+    const ret = [];
+    if (root === null) return ret;
+    const queue = [root];
+    for (let i = 0; i < queue.length; i++) {
+        let node = queue[i];
+        if (node !== null) {
+            ret.push(node.val);
+            queue.push(node.left);
+            queue.push(node.right);
+        } else {
+            ret.push(null);
+        }
     }
-  }
 
-  let size = ret.length;
-  // 从后到前把第一个非null元素之前的null全部删除
-  for (let j = size - 1; j >= 0; j--) {
-    if (ret[j] === null) {
-      ret.pop();
-    } else {
-      break;
+    let size = ret.length;
+    // 从后到前把第一个非null元素之前的null全部删除
+    for (let j = size - 1; j >= 0; j--) {
+        if (ret[j] === null) {
+            ret.pop();
+        } else {
+            break;
+        }
     }
-  }
-  return ret;
+    return ret;
 }
 
 // for test
@@ -92,19 +92,19 @@ function treeToArray(root) {
  * @return {[]}
  */
 function preorderTraversal(root) {
-  const ret = [];
-  if (root == null) return ret;
-  const stack = [];
-  while (root !== null || stack.length !== 0) {
-    while (root !== null) {
-      stack.push(root);
-      ret.push(root.val);
-      root = root.left;
+    const ret = [];
+    if (root == null) return ret;
+    const stack = [];
+    while (root !== null || stack.length !== 0) {
+        while (root !== null) {
+            stack.push(root);
+            ret.push(root.val);
+            root = root.left;
+        }
+        root = stack.pop();
+        root = root.right;
     }
-    root = stack.pop();
-    root = root.right;
-  }
-  return ret;
+    return ret;
 }
 
 
@@ -114,19 +114,19 @@ function preorderTraversal(root) {
  * @return {[]}
  */
 function inorderTraversal(root) {
-  const ret = [];
-  if (root == null) return ret;
-  const stack = [];
-  while (root !== null || stack.length !== 0) {
-    while (root !== null) {
-      stack.push(root);
-      root = root.left;
+    const ret = [];
+    if (root == null) return ret;
+    const stack = [];
+    while (root !== null || stack.length !== 0) {
+        while (root !== null) {
+            stack.push(root);
+            root = root.left;
+        }
+        root = stack.pop();
+        ret.push(root.val);
+        root = root.right;
     }
-    root = stack.pop();
-    ret.push(root.val);
-    root = root.right;
-  }
-  return ret;
+    return ret;
 }
 
 // for test
@@ -139,26 +139,26 @@ function inorderTraversal(root) {
  * @param {number} val
  */
 function insertIntoBST(root, val) {
-  let node = new TreeNode(val);
-  if (root === null) return node;
-  let cur = root;
-  while (true) {
-    if (cur.val > val) {
-      // 如果当前节点的左子节点为空，插入到左子节点
-      if (cur.left === null) {
-        cur.left = node;
-        break;
-      }
-      cur = cur.left;
-    } else {
-      if (cur.right === null) {
-        cur.right = node;
-        break;
-      }
-      cur = cur.right;
+    let node = new TreeNode(val);
+    if (root === null) return node;
+    let cur = root;
+    while (true) {
+        if (cur.val > val) {
+            // 如果当前节点的左子节点为空，插入到左子节点
+            if (cur.left === null) {
+                cur.left = node;
+                break;
+            }
+            cur = cur.left;
+        } else {
+            if (cur.right === null) {
+                cur.right = node;
+                break;
+            }
+            cur = cur.right;
+        }
     }
-  }
-  return root;
+    return root;
 }
 
 /**
@@ -168,12 +168,12 @@ function insertIntoBST(root, val) {
  * @constructor
  */
 function BSTSort(array) {
-  let bstTree = null;
-  for (let e of array) {
-    bstTree = insertIntoBST(bstTree, e);
-  }
+    let bstTree = null;
+    for (let e of array) {
+        bstTree = insertIntoBST(bstTree, e);
+    }
 
-  return inorderTraversal(bstTree);
+    return inorderTraversal(bstTree);
 }
 
 // let unsorted = generateRandomArray(20, 100);
@@ -198,9 +198,9 @@ console.log(anew);
  * @return {[]}
  */
 function generateRandomArray(size, boundary) {
-  let ret = [];
-  for (let i = 0; i < size; i++) {
-    ret.push(Math.random() * boundary | 0);
-  }
-  return ret;
+    let ret = [];
+    for (let i = 0; i < size; i++) {
+        ret.push(Math.random() * boundary | 0);
+    }
+    return ret;
 }

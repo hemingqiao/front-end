@@ -14,8 +14,8 @@ description: IPV4格式的ip地址和整型进行转换
  * @return {string}
  */
 function integerToIPV4(integer) {
-  if (integer > 0xFFFFFFFF || integer < 0) throw new Error("invalid integer");
-  return Array(4).fill(0).map((_, idx) => integer >> (8 * (3 - idx)) & 0xFF).join(".");
+    if (integer > 0xFFFFFFFF || integer < 0) throw new Error("invalid integer");
+    return Array(4).fill(0).map((_, idx) => integer >> (8 * (3 - idx)) & 0xFF).join(".");
 }
 
 console.log(integerToIPV4(4294967295)); // 255.255.255.255
@@ -27,12 +27,12 @@ console.log(integerToIPV4(4294967295)); // 255.255.255.255
  * @return {bigint}
  */
 function IPV4toInteger(ip) {
-  const segments = ip.split(".").map(BigInt);
-  let ret = BigInt(0);
-  for (let seg of segments) {
-    ret = (ret << BigInt(8)) | seg;
-  }
-  return ret;
+    const segments = ip.split(".").map(BigInt);
+    let ret = BigInt(0);
+    for (let seg of segments) {
+        ret = (ret << BigInt(8)) | seg;
+    }
+    return ret;
 }
 
 console.log(IPV4toInteger("180.101.42.30")); // 3026528798n
@@ -44,7 +44,7 @@ console.log(IPV4toInteger("180.101.42.30")); // 3026528798n
  * @return {*}
  */
 function IPV4toInteger1(ip) {
-  return ip.split(".").map(BigInt).reduce((acc, cur) => acc << BigInt(8) | cur, BigInt(0));
+    return ip.split(".").map(BigInt).reduce((acc, cur) => acc << BigInt(8) | cur, BigInt(0));
 }
 
 console.log(IPV4toInteger1("10.3.3.3")); // 167969539n
@@ -57,8 +57,8 @@ console.log(IPV4toInteger1("10.3.3.3")); // 167969539n
  * @constructor
  */
 function IPV4toInteger2(ip) {
-  const hex = ip.split(".").map(Number).map(val => (val > 15 ? "" : "0") + val.toString(16));
-  return parseInt(hex.join(""), 16);
+    const hex = ip.split(".").map(Number).map(val => (val > 15 ? "" : "0") + val.toString(16));
+    return parseInt(hex.join(""), 16);
 }
 
 let res1 = IPV4toInteger2("180.101.42.30");
@@ -71,8 +71,8 @@ console.log(res1); // 3026528798
  * @return {*}
  */
 function IPV4toInteger3(ip) {
-  // 处理溢出，使用无符号右移运算符抹除符号位的影响
-  return ip.split(".").map(Number).reduce((acc, cur) => acc << 8 | cur, 0) >>> 0;
+    // 处理溢出，使用无符号右移运算符抹除符号位的影响
+    return ip.split(".").map(Number).reduce((acc, cur) => acc << 8 | cur, 0) >>> 0;
 }
 
 console.log(IPV4toInteger3("180.101.42.30")); // 3026528798

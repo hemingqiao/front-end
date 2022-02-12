@@ -8,19 +8,19 @@
  * @returns {function(...[*]=)}
  */
 function curry(fn, length = fn.length) {
-  return function (...args) {
-    if (length <= args.length) {
-      return fn(...args);
-    } else {
-      return curry(curryAuxiliary(fn, ...args), length - args.length);
+    return function (...args) {
+        if (length <= args.length) {
+            return fn(...args);
+        } else {
+            return curry(curryAuxiliary(fn, ...args), length - args.length);
+        }
     }
-  }
 }
 
 function curryAuxiliary(fn, ...args) {
-  return function (...vars) {
-    return fn(...args, ...vars);
-  }
+    return function (...vars) {
+        return fn(...args, ...vars);
+    }
 }
 
 
@@ -32,26 +32,26 @@ function curryAuxiliary(fn, ...args) {
  * @returns {function(...[*]=)}
  */
 function curry(fn, length) {
-  length = length || fn.length;
+    length = length || fn.length;
 
-  return function () {
-    var args = [].slice.call(arguments);
-    if (length <= args.length) {
-      return fn.apply(this, args);
-    } else {
-      var combined = [fn].concat(args);
-      return curry(curryAuxiliary.apply(this, combined), length - args.length);
+    return function () {
+        var args = [].slice.call(arguments);
+        if (length <= args.length) {
+            return fn.apply(this, args);
+        } else {
+            var combined = [fn].concat(args);
+            return curry(curryAuxiliary.apply(this, combined), length - args.length);
+        }
     }
-  }
 }
 
 function curryAuxiliary(fn) {
-  var args = [].slice.call(arguments, 1);
+    var args = [].slice.call(arguments, 1);
 
-  return function () {
-    var vars = [].slice.call(arguments);
-    return fn.apply(this, args.concat(vars));
-  }
+    return function () {
+        var vars = [].slice.call(arguments);
+        return fn.apply(this, args.concat(vars));
+    }
 }
 
 
@@ -63,31 +63,30 @@ function curryAuxiliary(fn) {
  * @returns {*}
  */
 const curry = (fn, ...args) =>
-  fn.length <= args.length
-    ? fn(...args)
-    : curry.bind(this, fn, ...args);
+    fn.length <= args.length
+        ? fn(...args)
+        : curry.bind(this, fn, ...args);
 
- 
+
 /*
 补充
 */
 function curry(fn, ...args) {
-  return function (...vars) {
-    let args_ = args.concat(vars);
-    if (fn.length <= args_.length) {
-      return fn.apply(this, args_);
-    } else {
-      return curry.call(this, fn, ...args_);
-    }
-  };
+    return function (...vars) {
+        let args_ = args.concat(vars);
+        if (fn.length <= args_.length) {
+            return fn.apply(this, args_);
+        } else {
+            return curry.call(this, fn, ...args_);
+        }
+    };
 }
 
 // 上面代码的箭头函数版本
 const curry = (fn, ...args) => (...vars) =>
-  fn.length <= args.concat(vars).length
-    ? fn.apply(this, args.concat(vars))
-    : curry.call(this, fn, ...args.concat(vars));
-
+    fn.length <= args.concat(vars).length
+        ? fn.apply(this, args.concat(vars))
+        : curry.call(this, fn, ...args.concat(vars));
 
 
 /**
@@ -98,23 +97,22 @@ const curry = (fn, ...args) => (...vars) =>
  * @returns {function(...[*]=)}
  */
 function curryNormal(fn, args) {
-  var length = fn.length;
-  args = args || [];
+    var length = fn.length;
+    args = args || [];
 
-  return function () {
-    var args_ = args.slice();
-    for (var i = 0; i < arguments.length; i++) {
-      args_.push(arguments[i]);
-    }
+    return function () {
+        var args_ = args.slice();
+        for (var i = 0; i < arguments.length; i++) {
+            args_.push(arguments[i]);
+        }
 
-    if (length <= args_.length) {
-      return fn.apply(this, args_);
-    } else {
-      return curryNormal.call(this, fn, args_);
+        if (length <= args_.length) {
+            return fn.apply(this, args_);
+        } else {
+            return curryNormal.call(this, fn, args_);
+        }
     }
-  }
 }
-
 
 
 /*! *****************************************************************************
@@ -127,39 +125,39 @@ description: 可传入占位符的柯里化（貌似实现的不太对）
 let _ = {};
 
 function curry(fn, allArgs = []) {
-  let length = fn.length;
+    let length = fn.length;
 
-  return function (...args) {
-    let _args = allArgs.slice();
-    // args中存在占位符
-    if (args.includes(_)) {
-      _args = _args.concat(args);
-    } else {
-      // args中不存在占位符，可以向前补位
-      _args.forEach((val, idx) => {
-        if (Object.is(val, _) && args.length !== 0) {
-          _args.splice(idx, 1, args.shift());
+    return function (...args) {
+        let _args = allArgs.slice();
+        // args中存在占位符
+        if (args.includes(_)) {
+            _args = _args.concat(args);
+        } else {
+            // args中不存在占位符，可以向前补位
+            _args.forEach((val, idx) => {
+                if (Object.is(val, _) && args.length !== 0) {
+                    _args.splice(idx, 1, args.shift());
+                }
+            });
+            if (args.length !== 0) {
+                _args = _args.concat(args);
+            }
         }
-      });
-      if (args.length !== 0) {
-        _args = _args.concat(args);
-      }
-    }
 
-    // 如果尚未汇集完参数，或者仍存在占位符，需要继续汇集参数
-    if (_args.length < length || _args.includes(_)) {
-      return curry(fn, _args);
-    } else {
-      return fn(..._args);
+        // 如果尚未汇集完参数，或者仍存在占位符，需要继续汇集参数
+        if (_args.length < length || _args.includes(_)) {
+            return curry(fn, _args);
+        } else {
+            return fn(..._args);
+        }
     }
-  }
 }
 
 let curriedFoo = curry(foo);
 curriedFoo(_, 1024)(_, 64)(32, 2048);
 
 function foo(a, b, c) {
-  console.log(a, b, c);
+    console.log(a, b, c);
 }
 
 // log

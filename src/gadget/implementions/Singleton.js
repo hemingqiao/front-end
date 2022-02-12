@@ -6,19 +6,19 @@ description: JS实现单例模式
 ***************************************************************************** */
 
 class Singleton {
-  static #instance = null;
+    static #instance = null;
 
-  constructor(name) {
-    if (Singleton.#instance) {
-      return Singleton.#instance;
+    constructor(name) {
+        if (Singleton.#instance) {
+            return Singleton.#instance;
+        }
+        this.name = name;
+        Singleton.#instance = this;
     }
-    this.name = name;
-    Singleton.#instance = this;
-  }
 
-  getName() {
-    return this.name;
-  }
+    getName() {
+        return this.name;
+    }
 }
 
 let instance1 = new Singleton("foo");
@@ -32,24 +32,24 @@ console.log(instance2 == instance3); // true
 
 // 参考：https://www.kancloud.cn/cyyspring/more/1317419
 class Person {
-  constructor(name) {
-    this.name = name;
-  }
+    constructor(name) {
+        this.name = name;
+    }
 
-  getName() {
-    return this.name;
-  }
+    getName() {
+        return this.name;
+    }
 }
 
 const CreateSingleton = (function () {
-  let instance = null;
+    let instance = null;
 
-  return function (name) {
-    if (instance == null) {
-      instance =  new Person(name);
-    }
-    return instance;
-  };
+    return function (name) {
+        if (instance == null) {
+            instance = new Person(name);
+        }
+        return instance;
+    };
 })();
 
 let a = CreateSingleton("foo");

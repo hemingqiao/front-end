@@ -7,51 +7,54 @@ description: 基于Promise的并发任务队列类，允许最多并发执行lim
 ***************************************************************************** */
 
 class ConcurrentTask {
-  #capacity = 0;
-  #queue = [];
+    #capacity = 0;
+    #queue = [];
 
-  constructor(limit = 10) {
-    this.#capacity = limit;
-    setTimeout(() => this.run()); // 使用箭头函数，确保this的值
-  }
-
-  addTask(...tasks) {
-    this.#queue.push(...tasks);
-  }
-
-  run() {
-    while (this.#capacity > 0 && this.#queue.length > 0) {
-      this.#capacity--;
-      let task = this.#queue.shift();
-      task().then(res => console.log(res))
-        .catch(err => console.log(err))
-        .finally(() => {
-          this.#capacity++;
-          this.run();
-        });
+    constructor(limit = 10) {
+        this.#capacity = limit;
+        setTimeout(() => this.run()); // 使用箭头函数，确保this的值
     }
-  }
+
+    addTask(...tasks) {
+        this.#queue.push(...tasks);
+    }
+
+    run() {
+        while (this.#capacity > 0 && this.#queue.length > 0) {
+            this.#capacity--;
+            let task = this.#queue.shift();
+            task().then(res => console.log(res))
+                .catch(err => console.log(err))
+                .finally(() => {
+                    this.#capacity++;
+                    this.run();
+                });
+        }
+    }
 }
 
 function t1() {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, 1000, "after 1s");
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, 1000, "after 1s");
+    });
 }
+
 function t2() {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, 2000, "after 2s");
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, 2000, "after 2s");
+    });
 }
+
 function t3() {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, 3000, "after 3s");
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, 3000, "after 3s");
+    });
 }
+
 function t4() {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, 4000, "after 4s");
-  });
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, 4000, "after 4s");
+    });
 }
 
 let c = new ConcurrentTask(3);

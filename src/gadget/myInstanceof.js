@@ -9,27 +9,27 @@
  * @return {boolean}
  */
 function myInstanceof(A, B) {
-  // B如果为undefined、null或者原始类型，抛出以下错误
-  if (!B || Object(B) !== B) {
-    throw new TypeError("Right-hand side of 'instanceof' is not an object");
-  }
-  if (typeof B !== "function") {
-    throw new TypeError("Right-hand side of 'instanceof' is not callable");
-  }
-
-  let rightPrototype = B.prototype,
-      leftProto = Object.getPrototypeOf(A);
-
-  while (leftProto != null) {
-    if (!rightPrototype) {
-      throw new TypeError("Function has non-object prototype in instanceof check");
+    // B如果为undefined、null或者原始类型，抛出以下错误
+    if (!B || Object(B) !== B) {
+        throw new TypeError("Right-hand side of 'instanceof' is not an object");
     }
-    if (leftProto == rightPrototype) {
-      return true;
+    if (typeof B !== "function") {
+        throw new TypeError("Right-hand side of 'instanceof' is not callable");
     }
-    leftProto = Object.getPrototypeOf(leftProto);
-  }
-  return false;
+
+    let rightPrototype = B.prototype,
+        leftProto = Object.getPrototypeOf(A);
+
+    while (leftProto != null) {
+        if (!rightPrototype) {
+            throw new TypeError("Function has non-object prototype in instanceof check");
+        }
+        if (leftProto == rightPrototype) {
+            return true;
+        }
+        leftProto = Object.getPrototypeOf(leftProto);
+    }
+    return false;
 }
 
 

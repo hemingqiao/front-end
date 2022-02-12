@@ -7,20 +7,20 @@ description: eloquent js中作者给出的一个回溯算法。
 ***************************************************************************** */
 
 function backtracking(target) {
-  const table = [];
-  dfs(1, target, "1");
-  return table;
+    const table = [];
+    dfs(1, target, "1");
+    return table;
 
-  function dfs(cur, tar, history) {
-    if (cur >= tar) { // 递归结束条件，当前值大于等于目标值
-      if (cur === tar) {
-        table.push(history);
-      }
-      return;
+    function dfs(cur, tar, history) {
+        if (cur >= tar) { // 递归结束条件，当前值大于等于目标值
+            if (cur === tar) {
+                table.push(history);
+            }
+            return;
+        }
+        dfs(cur * 3, tar, `${history} * 3`);
+        dfs(cur + 5, tar, `(${history} + 5)`);
     }
-    dfs(cur * 3, tar, `${history} * 3`);
-    dfs(cur + 5, tar, `(${history} + 5)`);
-  }
 }
 
 console.log(backtracking(52));

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 
-  <!-- Don't use this in production: -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-  <div id="app">
+<div id="app">
 
-  </div>
+</div>
 
-  <script type="text/babel">
+<script type="text/babel">
     const {useState, useEffect, useCallback, useRef, Component} = React;
 
     /*function App() {
@@ -81,42 +81,42 @@
     }*/
 
     function useDebounce(callback, duration) {
-      const cbRef = useRef();
-      cbRef.current = callback;
-      const timerRef = useRef();
+        const cbRef = useRef();
+        cbRef.current = callback;
+        const timerRef = useRef();
 
-      let func = useCallback((...args) => {
-        clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
-          cbRef.current(...args);
-        }, duration);
-      }, [duration]);
+        let func = useCallback((...args) => {
+            clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => {
+                cbRef.current(...args);
+            }, duration);
+        }, [duration]);
 
-      return func;
+        return func;
     }
 
     function App() {
-      const [count, setCount] = useState(0);
-      const onMove = useCallback(() => {
-        console.log("move");
-        setCount(Math.random());
-      }, []);
-      const debouncedFunc = useDebounce(onMove, 1000);
+        const [count, setCount] = useState(0);
+        const onMove = useCallback(() => {
+            console.log("move");
+            setCount(Math.random());
+        }, []);
+        const debouncedFunc = useDebounce(onMove, 1000);
 
-      return (
-        <div
-          onMouseMove={debouncedFunc}
-          style={{height: "600px", border: "1px solid"}}
-        >
-          {count}
-        </div>
-      );
+        return (
+            <div
+                onMouseMove={debouncedFunc}
+                style={{height: "600px", border: "1px solid"}}
+            >
+                {count}
+            </div>
+        );
     }
 
     ReactDOM.render(
-      <App />,
-      document.getElementById("app")
+        <App/>,
+        document.getElementById("app")
     );
-  </script>
+</script>
 </body>
 </html>

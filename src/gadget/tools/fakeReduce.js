@@ -30,18 +30,18 @@ description: 模拟实现Array.prototype.reduce
  * @return {*}
  */
 Array.prototype.fakeReduce = function (callbackfn, initValue) {
-  let len = this.length;
-  let hasInitValue = false;
+    let len = this.length;
+    let hasInitValue = false;
 
-  let res = this[0];
-  if (arguments.length === 2) {
-    res = initValue;
-    hasInitValue = true;
-  }
-  for (let i = hasInitValue ? 0 : 1; i < len; i++) {
-    res = callbackfn(res, this[i], i, this);
-  }
-  return res;
+    let res = this[0];
+    if (arguments.length === 2) {
+        res = initValue;
+        hasInitValue = true;
+    }
+    for (let i = hasInitValue ? 0 : 1; i < len; i++) {
+        res = callbackfn(res, this[i], i, this);
+    }
+    return res;
 }
 
 /**
@@ -51,18 +51,18 @@ Array.prototype.fakeReduce = function (callbackfn, initValue) {
  * @return {*}
  */
 Array.prototype.fakeReduce1 = function (callbackfn, initValue) {
-  let len = this.length;
-  let start = 0;
+    let len = this.length;
+    let start = 0;
 
-  let res = this[0];
-  if (arguments.length === 2) {
-    res = initValue;
-    start = 1;
-  }
-  for (let i = start; i < len; i++) {
-    res = callbackfn(res, this[i], i, this);
-  }
-  return res;
+    let res = this[0];
+    if (arguments.length === 2) {
+        res = initValue;
+        start = 1;
+    }
+    for (let i = start; i < len; i++) {
+        res = callbackfn(res, this[i], i, this);
+    }
+    return res;
 }
 
 
@@ -88,7 +88,6 @@ Array.prototype.fakeReduce1 = function (callbackfn, initValue) {
 // }, 100);
 //
 // console.log(sum);
-
 
 
 // const fn1 = () => {
@@ -126,10 +125,10 @@ Array.prototype.fakeReduce1 = function (callbackfn, initValue) {
  * @return {boolean}
  */
 function equal(a, b) {
-  if (a === b) {
-    return a !== 0 || 1 / a === 1 / b;
-  }
-  return a !== a && b !== b;
+    if (a === b) {
+        return a !== 0 || 1 / a === 1 / b;
+    }
+    return a !== a && b !== b;
 }
 
 // for test

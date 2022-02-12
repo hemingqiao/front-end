@@ -9,12 +9,12 @@ description: js中新增的同值比较算法
 
 // polyfill
 if (!Object.is) {
-  Object.is = function (value1, value2) {
-    if (value1 === value2) {
-      // 判断 +0 != -0
-      return value1 !== 0 || 1 / value1 === 1 / value2;
-    }
-    // 判断 NaN == NaN
-    return value1 !== value1 && value2 !== value2;
-  };
+    Object.is = function (value1, value2) {
+        if (value1 === value2) {
+            // 判断 +0 != -0
+            return value1 !== 0 || 1 / value1 === 1 / value2;
+        }
+        // 判断 NaN == NaN
+        return value1 !== value1 && value2 !== value2;
+    };
 }

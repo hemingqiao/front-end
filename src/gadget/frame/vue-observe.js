@@ -39,23 +39,23 @@ function observe(obj, callback) {
 */
 
 function observe(obj, callback) {
-  for (let key in obj) {
-    let val = obj[key];
-    Object.defineProperty(obj, key, {
-      get() {
-        return val;
-      },
-      set(newVal) {
-        if (newVal === val) return;
-        val = observe(newVal, callback);
-        callback();
-      }
-    });
-    if (val && typeof val === "object") {
-      observe(val, callback);
+    for (let key in obj) {
+        let val = obj[key];
+        Object.defineProperty(obj, key, {
+            get() {
+                return val;
+            },
+            set(newVal) {
+                if (newVal === val) return;
+                val = observe(newVal, callback);
+                callback();
+            }
+        });
+        if (val && typeof val === "object") {
+            observe(val, callback);
+        }
     }
-  }
-  return obj;
+    return obj;
 }
 
 let oo = {x: 32, y: 1024};

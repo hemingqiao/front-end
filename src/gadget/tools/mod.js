@@ -6,15 +6,15 @@
  * @returns {string} 返回n进制下m位的表示
  */
 function mod(number, n, m) {
-  let result = [];
-  while (number) {
-    result.push(number % n);
-    number = Math.floor(number / n);
-  }
-  while (result.length < m) {
-    result.push(0);
-  }
-  return result.reverse().join("");
+    let result = [];
+    while (number) {
+        result.push(number % n);
+        number = Math.floor(number / n);
+    }
+    while (result.length < m) {
+        result.push(0);
+    }
+    return result.reverse().join("");
 }
 
 
@@ -32,19 +32,19 @@ console.log(mod(6, 2, 32)); // 00000000000000000000000000000110
  * @returns {number}
  */
 function reverseNumber(number) {
-  let negativeFlag = false;
-  if (number < 0) {
-    number = -number;
-    negativeFlag = true;
-  }
+    let negativeFlag = false;
+    if (number < 0) {
+        number = -number;
+        negativeFlag = true;
+    }
 
-  let result = 0;
-  while (number) {
-    result = result * 10 + number % 10;
-    number = Math.floor(number / 10);
-  }
-  if (negativeFlag) return -result;
-  return result;
+    let result = 0;
+    while (number) {
+        result = result * 10 + number % 10;
+        number = Math.floor(number / 10);
+    }
+    if (negativeFlag) return -result;
+    return result;
 }
 
 console.log(reverseNumber(-3800));
@@ -56,20 +56,20 @@ console.log(reverseNumber(85471));
  * @returns {number}
  */
 function reverseNumberOpt(number) {
-  let result = 0;
-  while (number !== 0) {
-    let y = number % 10;
-    if (number < 0) {
-      // 负数向上取整
-      number = Math.ceil(number / 10);
-    } else {
-      // 正数向下取整
-      number = Math.floor(number / 10);
+    let result = 0;
+    while (number !== 0) {
+        let y = number % 10;
+        if (number < 0) {
+            // 负数向上取整
+            number = Math.ceil(number / 10);
+        } else {
+            // 正数向下取整
+            number = Math.floor(number / 10);
+        }
+        result = result * 10 + y;
     }
-    result = result * 10 + y;
-  }
-  // result | 0 超过32位的整数转换结果不等于自身，可用作溢出判断
-  return (result | 0) === result ? result : 0;
+    // result | 0 超过32位的整数转换结果不等于自身，可用作溢出判断
+    return (result | 0) === result ? result : 0;
 }
 
 console.log(reverseNumberOpt(Number.MAX_SAFE_INTEGER)); // 这个数值会溢出
@@ -83,13 +83,13 @@ console.log(reverseNumberOpt(-123));
  * @return {number}
  */
 const reverseMath = function (x) {
-  let result = 0;
-  while (x !== 0) {
-    let y = x % 10;
-    // 通过 | 0 取整，无论正负，只移除小数点部分（正数向下取整，负数向上取整）。
-    x = x / 10 | 0;
-    result = result * 10 + y;
-  }
-  // result | 0 超过32位的整数转换结果不等于自身，可用作溢出判断
-  return (result | 0) === result ? result : 0;
+    let result = 0;
+    while (x !== 0) {
+        let y = x % 10;
+        // 通过 | 0 取整，无论正负，只移除小数点部分（正数向下取整，负数向上取整）。
+        x = x / 10 | 0;
+        result = result * 10 + y;
+    }
+    // result | 0 超过32位的整数转换结果不等于自身，可用作溢出判断
+    return (result | 0) === result ? result : 0;
 }

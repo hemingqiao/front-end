@@ -8,22 +8,22 @@
 </head>
 
 <body>
-    <script>
-        function foo() {
-            console.log("I am outside.")
+<script>
+    function foo() {
+        console.log("I am outside.")
+    }
+
+    (function () {
+        if (false) {
+            // 重复声明一次foo函数
+            function foo() {
+                console.log("I am inside.");
+            }
         }
 
-        (function () {
-            if (false) {
-                // 重复声明一次foo函数
-                function foo() {
-                    console.log("I am inside.");
-                }
-            }
-
-            foo();
-        })();
-    </script>
+        foo();
+    })();
+</script>
 </body>
 
 </html>

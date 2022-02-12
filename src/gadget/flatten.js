@@ -1,7 +1,6 @@
 /** 数组扁平化的一些方法 **/
 
 
-
 /**
  * 最简单的方法是使用es2019新提供的方法
  *
@@ -9,9 +8,8 @@
  * @returns {any[]}
  */
 function flatten(array) {
-  return array.flat(Infinity);
+    return array.flat(Infinity);
 }
-
 
 
 /**
@@ -21,13 +19,12 @@ function flatten(array) {
  * @returns {*}
  */
 function flatten(array) {
-  while (array.some(v => Array.isArray(v))) {
-    array = [].concat(...array);
-  }
+    while (array.some(v => Array.isArray(v))) {
+        array = [].concat(...array);
+    }
 
-  return array;
+    return array;
 }
-
 
 
 /**
@@ -39,7 +36,6 @@ function flatten(array) {
 const flatten = array => array.reduce((prev, next) => prev.concat(Array.isArray(next) ? flatten(next) : next), []);
 
 
-
 /**
  * 利用generator函数
  *
@@ -47,19 +43,18 @@ const flatten = array => array.reduce((prev, next) => prev.concat(Array.isArray(
  * @returns {any}
  */
 function flatten(array) {
-  function* _flatten(array) {
-    for (let i = 0; i < array.length; i++) {
-      if (Array.isArray(array[i])) {
-        yield* _flatten(array[i]);
-      } else {
-        yield array[i];
-      }
+    function* _flatten(array) {
+        for (let i = 0; i < array.length; i++) {
+            if (Array.isArray(array[i])) {
+                yield* _flatten(array[i]);
+            } else {
+                yield array[i];
+            }
+        }
     }
-  }
 
-  return [..._flatten(array)];
+    return [..._flatten(array)];
 }
-
 
 
 /**
@@ -69,17 +64,17 @@ function flatten(array) {
  * @returns {[]}
  */
 function flatten(array) {
-  let result = [];
+    let result = [];
 
-  for (let e of array) {
-    if (Array.isArray(e)) {
-      result = result.concat(flatten(e));
-    } else {
-      result.push(e);
+    for (let e of array) {
+        if (Array.isArray(e)) {
+            result = result.concat(flatten(e));
+        } else {
+            result.push(e);
+        }
     }
-  }
 
-  return result;
+    return result;
 }
 
 /**
@@ -89,19 +84,19 @@ function flatten(array) {
  * @returns {[]}
  */
 function flatten(array) {
-  let result = [];
-  _flatten(array);
-  return result;
+    let result = [];
+    _flatten(array);
+    return result;
 
-  function _flatten(arr) {
-    arr.forEach(value => {
-      if (Array.isArray(value)) {
-        _flatten(value);
-      } else {
-        result.push(value);
-      }
-    });
-  }
+    function _flatten(arr) {
+        arr.forEach(value => {
+            if (Array.isArray(value)) {
+                _flatten(value);
+            } else {
+                result.push(value);
+            }
+        });
+    }
 }
 
 
@@ -112,19 +107,19 @@ function flatten(array) {
  * @returns {*[]}
  */
 function flatten(array) {
-  const stack = [...array];
-  const res = [];
-  while (stack.length) {
-    // 取出栈顶元素
-    const top = stack.pop();
-    if (Array.isArray(top)) {
-      stack.push(...top);
-    } else {
-      res.push(top);
+    const stack = [...array];
+    const res = [];
+    while (stack.length) {
+        // 取出栈顶元素
+        const top = stack.pop();
+        if (Array.isArray(top)) {
+            stack.push(...top);
+        } else {
+            res.push(top);
+        }
     }
-  }
-  // 反转数组并返回
-  return res.reverse();
+    // 反转数组并返回
+    return res.reverse();
 }
 
 // see: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/flat

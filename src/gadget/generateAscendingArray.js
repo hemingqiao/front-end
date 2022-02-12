@@ -9,16 +9,16 @@ const ge = n => Array.from(Array(n), (v, k) => k + 1);
  * @returns {[]}
  */
 function gene(n) {
-  let result = [];
+    let result = [];
 
-  (function fn() {
-    result.unshift(n--);
-    if (n) {
-      fn();
-    }
-  })();
+    (function fn() {
+        result.unshift(n--);
+        if (n) {
+            fn();
+        }
+    })();
 
-  return result;
+    return result;
 }
 
 console.log(ge(10));
@@ -37,16 +37,16 @@ console.log(gene(10));
 
 // 补充
 function generate(n) {
-  let ret = [];
-  help(n);
-  return ret;
+    let ret = [];
+    help(n);
+    return ret;
 
-  function help(n) {
-    if (n) {
-      help(n - 1);
-      ret.push(n);
+    function help(n) {
+        if (n) {
+            help(n - 1);
+            ret.push(n);
+        }
     }
-  }
 }
 
 
@@ -56,14 +56,14 @@ function generate(n) {
  * @returns {any}
  */
 function ascending(n) {
-  return [...generate(n)];
+    return [...generate(n)];
 
-  function* generate(n) {
-    if (n > 0) {
-      yield* generate(n - 1);
-      yield n;
+    function* generate(n) {
+        if (n > 0) {
+            yield* generate(n - 1);
+            yield n;
+        }
     }
-  }
 }
 
 console.log(ascending(10));
@@ -78,11 +78,11 @@ console.log(ascending(10));
 /* 下面这种方法使用了循环语句，不过非常巧妙 */
 
 Number.prototype[Symbol.iterator] = function* () {
-  let times = this.valueOf();
-  let i = 0;
-  while (times--) {
-    yield ++i;
-  }
+    let times = this.valueOf();
+    let i = 0;
+    while (times--) {
+        yield ++i;
+    }
 }
 
 const generateArray = n => [...n];
@@ -104,6 +104,6 @@ modify at 2021.05.28
 不能使用循环，那就需要利用递归了
  */
 function sum(n, ret = 0) {
-  if (n <= 0) return ret;
-  return sum(n - 1, ret + n);
+    if (n <= 0) return ret;
+    return sum(n - 1, ret + n);
 }
