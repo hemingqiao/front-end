@@ -40,37 +40,29 @@ function convertToTree(arr) {
     return tree;
 }
 
-
 /**
  * 递归解法
  *
- * @param arr
- * @param parent
- * @param depth
- * @return {*}
+ * @param {any[]} arr
+ * @returns {*}
  */
-function recurSolution(arr, parent = 0, depth = 0) {
-    let root = arr.shift();
-    root.depth = depth;
-    root.children = loop(arr, parent, depth + 1);
-    return root;
+function toTree(arr) {
+    let root = arr.splice(arr.findIndex(item => item.id === item.pid), 1)[0];
+    return help(root, root.id, 0);
 
-    function loop(arr, parent, depth) {
-        let ret = [];
-        for (let item of arr) {
-            if (item.pid === parent) {
-                item.depth = depth;
-                let res = loop(arr, item.id, depth + 1);
-                if (res.length) item.children = res;
-                ret.push(item);
+    function help(root, pid, depth) {
+        root.children = [];
+        root.depth = depth;
+        for (let node of arr) {
+            if (node.pid === pid) {
+                root.children.push(help(node, node.id, depth + 1));
             }
         }
-        return ret;
+        return root;
     }
 }
 
-let res = recurSolution(arr);
-console.log(res);
+console.log(JSON.stringify(toTree(arr), null, 2));
 
 
 /**
