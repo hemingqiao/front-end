@@ -40,15 +40,13 @@ Array.prototype.my_flat = function (depth = 1) {
 Array.prototype.fake_flat = function (depth) {
     if (!Array.isArray(this)) throw new TypeError(EXPECTED_ARRAY_INSTANCE_TEXT);
     if (Object.is(depth, NaN) || typeof depth !== "number") return this;
-    if (depth <= 0) return this.slice();
+
     return this.reduce((acc, cur) => {
-        if (Array.isArray(cur)) {
-            acc.push(...cur.fake_flat(depth - 1));
-        } else {
-            acc.push(cur);
-        }
+        if (Array.isArray(cur) && depth) acc.push(...cur.fake_flat(depth - 1));
+        else acc.push(cur);
         return acc;
     }, []);
 };
 
+console.log(test.fake_flat(1));
 console.log(test.fake_flat(Infinity));
