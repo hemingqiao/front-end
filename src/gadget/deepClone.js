@@ -94,8 +94,8 @@ let A = {
 }
 
 A.A = A;
-console.log(deepCopy(A));
-console.log(deepClone(A));
+// console.log(deepCopy(A));
+// console.log(deepClone(A));
 
 
 // result
@@ -128,26 +128,20 @@ console.log(deepClone(A));
 //   [Symbol(f)]: [Function: [f]]
 // }
 
-function cloneDeep(obj, map = new Map()) {
-    if (map.has(obj)) {
-        return map.get(obj);
-    }
-    if (obj === null) {
-        return null;
-    }
-    if (typeof obj === "object") {
-        const ret = Array.isArray(obj) ? [] : {};
-        map.set(obj, ret);
-        Reflect.ownKeys(obj).forEach(key => {
-            ret[key] = cloneDeep(obj[key], map);
-        });
-        return ret;
-    } else {
-        return obj;
-    }
+// update on 2022/08/12
+function copyDeep(obj, map = new Map()) {
+    if (!obj || typeof obj !== "object") return obj;
+    if (map.has(obj)) return map.get(obj);
+
+    let res = Array.isArray(obj) ? [] : {};
+    map.set(obj, res);
+    Reflect.ownKeys(obj).forEach(key => {
+        res[key] = copyDeep(obj[key], map);
+    });
+    return res;
 }
 
-console.log(cloneDeep(A));
+console.log(copyDeep(A));
 
 // log
 // <ref *1> {
