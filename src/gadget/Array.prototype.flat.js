@@ -17,19 +17,16 @@ const test = [0, [1, 2], [[3, [4], 5], [[6]]], 7];
 Array.prototype.my_flat = function (depth = 1) {
     if (!Array.isArray(this)) throw new TypeError(EXPECTED_ARRAY_INSTANCE_TEXT);
     if (Object.is(depth, NaN) || typeof depth !== "number") return this;
-    let ret = this.slice(), o = ret;
+    let res = this.slice();
     while (depth-- > 0) {
-        if (o.some(item => Array.isArray(item))) {
-            ret = [].concat(...o);
-            o = ret;
-        } else {
-            break;
-        }
+        if (res.some(Array.isArray)) res = [].concat(...res);
+        else break;
     }
-    return ret;
+    return res;
 };
 
-// console.log(test.my_flat(1));
+console.log(test.my_flat(1));
+console.log(test.my_flat(Infinity));
 
 /**
  * fake flat(recursive version)
@@ -48,5 +45,5 @@ Array.prototype.fake_flat = function (depth) {
     }, []);
 };
 
-console.log(test.fake_flat(1));
-console.log(test.fake_flat(Infinity));
+// console.log(test.fake_flat(1));
+// console.log(test.fake_flat(Infinity));
