@@ -34,7 +34,7 @@ console.log(+add(1, 2, 3)(4));
 // update
 const add = (...args) => {
     const f = (...params) => add(...args, ...params);
-    f.toString = args.reduce((a, b) => a + b);
+    f.__proto__.toString = () => args.reduce((a, b) => a + b);
     return f;
 }
 
