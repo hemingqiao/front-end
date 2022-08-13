@@ -18,3 +18,19 @@ const maxChunksToSorted = function(a) {
     }
     return res;
 };
+
+// 用前缀和判断两个集合是否相同
+/**
+ * @param {number[]} a
+ * @return {number}
+ */
+const maxChunksToSorted = function(a) {
+    let b = a.slice();
+    a.sort((num1, num2) => num1 - num2);
+    let res = 0;
+    for (let i = 0, s1 = 0, s2 = 0; i < a.length; i++) {
+        s1 += a[i], s2 += b[i];
+        if (s1 == s2) ++res;
+    }
+    return res;
+};
