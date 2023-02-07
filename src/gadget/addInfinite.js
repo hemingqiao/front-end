@@ -4,7 +4,7 @@ const add = sum => {
     const fn = n => add(sum + n);
     fn.valueOf = () => sum;
     return fn;
-}
+};
 
 console.log(add(0));
 console.log(add(0)(1));
@@ -22,7 +22,7 @@ const add = (...args) => {
     const fn = (...vars) => add(...args, ...vars);
     fn.valueOf = () => args.reduce((prev, curr) => prev + curr);
     return fn;
-}
+};
 
 console.log(+add(1, 2)(3, 4)(5));
 console.log(+add(1, 2, 3)(4));
@@ -36,7 +36,18 @@ const add = (...args) => {
     const f = (...params) => add(...args, ...params);
     f.__proto__.toString = () => args.reduce((a, b) => a + b);
     return f;
-}
+};
+
+// chatGPT 提供的一种写法
+const sum = (...args) => {
+    let s = args.reduce((a, b) => a + b, 0);
+    const f = (...moreArgs) => {
+        s += moreArgs.reduce((a, b) => a + b, 0);
+        return f;
+    };
+    f.toString = () => s;
+    return f;
+};
 
 
 /*
