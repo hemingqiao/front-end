@@ -1,7 +1,6 @@
 const fs = require("fs");
 const fsPromises = fs.promises;
 
-
 async function list(path) {
     return await getList(path);
 }
@@ -58,12 +57,11 @@ function getListSync(path) {
     }
 }
 
-let path = "D:/20_webstorm/ajsexercises/eloquentjs";
-let path1 = "D:/20_webstorm/ajsexercises/eloquentjs/node";
+const path = "/Users/heming/Desktop";
 
-// list(path1).then(res => console.log(res)).catch(err => console.log(err));
+// list(path).then(res => console.log(res)).catch(err => console.log(err));
 
-// console.log(getListSync(path1));
+// console.log(getListSync(path));
 
 
 // promise版本
@@ -87,4 +85,4 @@ function listPromise(path) {
     });
 }
 
-listPromise(path1 + "/file-server").then(res => console.log(res)).catch(err => console.log(err));
+listPromise(path).then(res => console.log(res)).catch(err => console.log(err));
