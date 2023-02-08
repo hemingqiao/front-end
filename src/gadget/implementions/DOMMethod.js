@@ -11,7 +11,7 @@ class DOMMethod {
         return dfs(startNode, id);
 
         function dfs(startNode, id) {
-            if (startNode.id === id) {
+            if (!startNode || startNode.id === id) {
                 return startNode;
             }
             for (let n of startNode.children) {

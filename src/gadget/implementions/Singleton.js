@@ -8,27 +8,29 @@ description: JS实现单例模式
 class Singleton {
     static #instance = null;
 
-    constructor(name) {
+    constructor() {
         if (Singleton.#instance) {
             return Singleton.#instance;
         }
-        this.name = name;
         Singleton.#instance = this;
     }
 
-    getName() {
-        return this.name;
+    static getInstance() {
+        if (!this.#instance)
+            this.#instance = new Singleton();
+        return this.#instance;
     }
 }
 
-let instance1 = new Singleton("foo");
-let instance2 = new Singleton("foo");
-let instance3 = new Singleton("baz");
+let instance1 = new Singleton();
+let instance2 = new Singleton();
+let instance3 = new Singleton();
 console.log(instance1 == instance2); // true
 console.log(instance2 == instance3); // true
+console.log(instance3 == Singleton.getInstance()); // true
 
 
-/* 利用代理实现 */
+/* 利用代理 + 闭包实现 */
 
 // 参考：https://www.kancloud.cn/cyyspring/more/1317419
 class Person {
