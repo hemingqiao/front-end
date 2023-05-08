@@ -22,8 +22,8 @@ function quickSort(arr, l = 0, r = arr.length - 1) {
     // let x = arr[(Math.random() * (r - l + 1) | 0) + l], i = l - 1, j = r + 1;
     let x = arr[l], i = l - 1, j = r + 1;
     while (i < j) {
-        while (arr[++i] < x) ;
-        while (arr[--j] > x) ;
+        do i++; while (arr[i] < x) ;
+        do j--; while (arr[j] > x) ;
         if (i < j) swap(arr, i, j);
     }
     quickSort(arr, l, j);
