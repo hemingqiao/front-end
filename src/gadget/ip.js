@@ -3,8 +3,8 @@
 /*
 [复原 ip 地址](https://leetcode.cn/problems/restore-ip-addresses/)
 
-input s = "25525511135"
-output ["255.255.11.135","255.255.111.35"]
+input: s = "25525511135"
+output: ["255.255.11.135","255.255.111.35"]
  */
 
 /**
@@ -34,7 +34,13 @@ const restoreIpAddresses = function(s) {
 };
 
 /*
-[468. 验证IP地址](https://leetcode.cn/problems/validate-ip-address/submissions/)
+[468. 验证IP地址](https://leetcode.cn/problems/validate-ip-address/)
+
+input: "172.16.254.1"
+output: "IPv4"
+
+input: "2001:0db8:85a3:0:0:8A2E:0370:7334"
+output: "IPv6"
  */
 
 const checkIPv6 = (s) => {
