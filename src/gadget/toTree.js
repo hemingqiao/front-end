@@ -7,44 +7,42 @@ const arr = [
     {id: 6, name: "部门6", pid: 2},
 ];
 
+// 类似于重建多叉树
 function toTree(list) {
     // 找到根结点
     let root = list.find(item => item.pid === 0);
-    return help(root, root.id);
-
-    function help(root, pid) {
-        if (!root.children) root.children = [];
-        for (let node of list) {
-            if (node.pid === pid) {
-                root.children.push(help(node, node.id));
-            }
-        }
-        return root;
-    }
+    const build = (root, depth) => {
+        const res = { ...root, depth, children: [] };
+        // 这一步可以用哈希加速
+        for (let node of list)
+            if (node.pid === root.id)
+                res.children.push(build(node, depth + 1));
+        return res;
+    };
+    return build(root, 1);
 }
 
 function toTreeRecur(list) {
-    let map = new Map(), root;
-    for (let node of list) {
-        if (!map.has(node.pid)) map.set(node.pid, []);
-        map.get(node.pid).push(node);
-        if (node.pid === 0) root = node;
+    let map = new Map(), root = null;
+    for (let item of arr) {
+        if (item.pid === 0) root = item;
+        if (!map.has(item.pid)) map.set(item.pid, []);
+        map.get(item.pid).push(item);
     }
-    return help(root, root.id, 0);
 
-    function help(root, pid, depth) {
-        if (!root.children) root.children = [];
-        root.depth = depth;
-        for (let n of map.get(pid) || []) {
-            root.children.push(help(n, n.id, depth + 1));
-        }
-        return root;
-    }
+    const build = (root, depth) => {
+        const res = { ...root, depth, children: [] };
+        for (let x of map.get(root.id) || [])
+            res.children.push(build(x, depth + 1));
+        return res;
+    };
+    return build(root, 1);
 }
 
 // console.log(JSON.stringify(toTree(arr), null, 2));
 console.log(JSON.stringify(toTreeRecur(arr), null, 2));
 
+// 非递归方法
 // O(n)
 function toTree1(list) {
     let map = new Map(), root;
