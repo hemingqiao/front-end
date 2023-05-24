@@ -1,19 +1,15 @@
 const SYMBOL_FOO = Symbol("foo");
 
-const isNotObject = o => !o || typeof o !== "object";
+const isPrimitive = o => o == null || typeof o !== "object";
+const { toString } = Object.prototype;
 
-function deepCompare(a, b) {
-    if (isNotObject(a) || isNotObject(b))
-        return a === b;
+function deepCompare(o1, o2) {
+    // { "0": 1, length: 1 } and [1]
+    if (toString.call(o1) != toString.call(o2)) return false;
+    if (isPrimitive(o1)) return o1 === o2;
+    if (Object.keys(o1).length != Object.keys(o2).length) return false;
 
-    if (Reflect.ownKeys(a).length !== Reflect.ownKeys(b).length)
-        return false;
-
-    for (let k of Reflect.ownKeys(a)) {
-        if (!deepCompare(a[k], b[k]))
-            return false;
-    }
-    return true;
+    return Object.keys(o1).every(k => deepCompare(o1[k], o2[k]));
 }
 
 let a = {
@@ -54,3 +50,4 @@ console.log(deepCompare(obj, obj));
 let result = deepCompare(obj, { here: 1, object: 2 });
 console.log(result);
 console.log(deepCompare(obj, { here: { is: "an" }, object: 2 }));
+console.log(deepCompare({0: 1, length: 1}, [1]));
