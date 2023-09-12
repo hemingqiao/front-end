@@ -32,34 +32,59 @@ function add(a, b) {
     });
 }
 
+// function sum(nums) {
+//     return new Promise((resolve, reject) => {
+//         run();
+//
+//         function run() {
+//             if (nums.filter(i => i !== null).length > 1) {
+//                 let a, b;
+//                 // 能进入这里，上面的if判断确保数组中存在大于等于2个的非null数字，不需要担心findIndex返回-1
+//                 a = nums.splice(nums.findIndex(i => i !== null), 1)[0];
+//                 b = nums.splice(nums.findIndex(i => i !== null), 1)[0];
+//                 nums.push(null);
+//                 add(a, b).then(res => {
+//                     for (let i = 0; i < nums.length; i++) {
+//                         if (nums[i] === null) {
+//                             nums[i] = res;
+//                             break;
+//                         }
+//                     }
+//                     run();
+//                 }, err => {
+//                     reject(err);
+//                 });
+//                 // 对 a b 执行完加法后，继续调用run
+//                 run();
+//             } else if (nums.length === 1 && nums[0] !== null) {
+//                 resolve(nums[0]);
+//             }
+//         }
+//     });
+// }
+
 function sum(nums) {
     return new Promise((resolve, reject) => {
-        run();
-
-        function run() {
-            if (nums.filter(i => i !== null).length > 1) {
-                let a, b;
-                // 能进入这里，上面的if判断确保数组中存在大于等于2个的非null数字，不需要担心findIndex返回-1
-                a = nums.splice(nums.findIndex(i => i !== null), 1)[0];
-                b = nums.splice(nums.findIndex(i => i !== null), 1)[0];
-                nums.push(null);
+        const run = () => {
+            while (nums.filter(i => i !== null).length > 1) {
+                let a = nums.splice(nums.findIndex(v => v !== null), 1)[0],
+                    b = nums.splice(nums.findIndex(v => v !== null), 1)[0];
+                nums.push(null); // 用 null 来占位
                 add(a, b).then(res => {
-                    for (let i = 0; i < nums.length; i++) {
+                    for (let i = 0; i < nums.length; i++)
                         if (nums[i] === null) {
                             nums[i] = res;
                             break;
                         }
-                    }
                     run();
                 }, err => {
                     reject(err);
                 });
-                // 对 a b 执行完加法后，继续调用run
-                run();
-            } else if (nums.length === 1 && nums[0] !== null) {
-                resolve(nums[0]);
             }
-        }
+            if (nums.length === 1 && nums[0] !== null)
+                resolve(nums[0]);
+        };
+        run();
     });
 }
 
@@ -70,15 +95,7 @@ sum([1, 2, 3, 4, 5, 6, 7]).then(res => {
     console.timeEnd("start");
 });
 
-
 /*
-
-function add(a, b) {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(a + b), 200);
-    });
-}
-
 function sum(nums) {
     return new Promise((resolve, reject) => {
         parallelAdd();
@@ -108,14 +125,4 @@ function sum(nums) {
         }
     });
 }
-
-const nums = [2, 1, 4, 7];
-
-(async () => {
-    console.time("add");
-    let res = await sum(nums);
-    console.timeEnd("add");
-    console.log(res);
-})();
-
  */

@@ -16,7 +16,7 @@ Function.prototype.myCall = function (context) {
     context = typeof context === "object"
         ? context === null ? window : context
         : context === undefined ? window : Object(context);
-    context.__fn__ = this;
+    context.__proto__.__fn__ = this;
 
     var result;
     var args = [];
@@ -25,7 +25,7 @@ Function.prototype.myCall = function (context) {
     }
     result = eval("context.__fn__(" + args + ")");
 
-    delete context.__fn__;
+    delete context.__proto__.__fn__;
     return result;
 }
 
@@ -112,7 +112,8 @@ bind的实现与call和apply具有较大的不同，主要是要考虑到bind返
 Function.prototype.myBind = function (context) {
     if (typeof this !== "function") {
         throw new TypeError(
-            "Function.prototype.bind - what is trying to be bound must be a function");
+            "Function.prototype.bind - what is trying to be bound must be a function"
+        );
     }
 
     var fToBind = this;

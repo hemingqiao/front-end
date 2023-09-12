@@ -127,5 +127,9 @@ class LFUCache {
     }
 }
 
-const lfu = new LFUCache(16);
-console.log(lfu);
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * var obj = new LFUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */

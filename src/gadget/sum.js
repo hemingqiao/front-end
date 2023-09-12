@@ -144,6 +144,7 @@ function promiseAdd(a, b) {
 
 function sum(...nums) {
     return new Promise((resolve, reject) => {
+        run();
 
         function run() {
             if (nums.filter(i => i !== null).length > 1) {
