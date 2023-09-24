@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .general-size {
+            width: 600px;
+            height: 400px;
+            text-align: center;
+            margin: 30px auto;
+        }
+
+        div.title-wrapper {
+            text-align: center;
+        }
+
+        div.title-wrapper > h1 {
+            display: inline-block;
+        }
+
+        /* -------------------group-1 using inline element------------------- */
+        /* 使用辅助元素来实现子元素的绝对居中 */
+
+        div.center-1 {
+            box-shadow: 0 0 10px blueviolet;
+            font-size: 0;
+        }
+
+        div.center-1 > em {
+            height: 100%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        div.center-1 > span {
+            font-size: initial;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: left;
+            margin: auto 20px;
+            box-shadow: 0 0 10px silver;
+        }
+
+
+        /* button's style */
+        .btn-div {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+
+        /* -------------------group-2 using inline element------------------- */
+        /* 借助空白幽灵节点实现绝对居中 */
+
+        .center-2 {
+            box-shadow: 0 0 10px orange;
+            line-height: 400px;
+            font-size: 0;
+        }
+
+        .center-2 > span {
+            line-height: normal;
+            font-size: initial;
+            display: inline-block;
+            vertical-align: middle;
+            margin: auto 20px;
+            box-shadow: 0 0 10px sienna;
+        }
+
+
+        /* -------------------group-3 using position------------------- */
+        /* 借助定位实现绝对居中 */
+
+        /*
+        子元素需要定宽高，因为如果不设置宽高的话，四个定位属性全为0，会使得子元素占据整个包含块的范围。
+        */
+        .center-3 {
+            box-shadow: 0 0 10px red;
+            position: relative;
+        }
+
+        .center-3 > .inner {
+            width: 200px;
+            height: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            box-shadow: 0 0 10px magenta;
+        }
+
+
+        /* -------------------group-4 using position and negative margin------------------- */
+        /* 借助定位和负外边距实现绝对居中 */
+
+        /*
+        这种方法中，居中的子元素需要定宽高，因为需要使用margin负值移动元素自身的一半来达到居中的效果。和使用translate实现居中很类似，
+        不同之处在于使用translate居中子元素不需要定宽高，因为其百分比值的基准就是子元素本身。
+        */
+        .center-4 {
+            box-shadow: 0 0 10px rebeccapurple;
+            position: relative;
+        }
+
+        .center-4 > .in {
+            width: 200px;
+            height: 100px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -100px;
+            margin-top: -50px;
+            box-shadow: 0 0 10px coral;
+        }
+
+
+        /* -------------------group-5 using display: table-cell------------------- */
+        /* 借助表格来实现元素绝对居中 */
+
+        .center-5 {
+            box-shadow: 0 0 10px cornflowerblue;
+            display: table-cell;
+            vertical-align: middle;
+            width: 600px;
+            height: 400px;
+        }
+
+        .center-5 .table-cell {
+            padding: 0 20px;
+            text-align: left;
+        }
+
+
+        /* -------------------group-6 using flex------------------- */
+        /* 借助flex实现元素绝对居中 */
+
+        div.center-6 {
+            display: flex;
+            box-shadow: 0 0 10px tan;
+        }
+
+        div.center-6 div.inner {
+            margin: auto;
+        }
+
+
+        /* -------------------group-7 using flex------------------- */
+        div.center-7 {
+            display: flex;
+            box-shadow: 0 0 10px gold;
+            /*flex-flow: row;*/
+            justify-content: center;
+            align-items: center;
+        }
+
+        div.center-7 div.inner {
+            box-sizing: border-box;
+            background-color: violet;
+        }
+
+        /* -------------------group-8 using 2d transform------------------- */
+
+        /*
+        绝对居中的子元素不需要定宽高，但是由于是使用绝对定位，left: 50%;和top: 50%;，导致子元素宽度最大值为包含块宽度的一半，如果子元素内容过多，
+        则会在垂直方向上超出父元素（包含块），但子元素此时仍然在垂直方向和水平方向上是居中的。
+        */
+        div.container {
+            position: relative;
+            box-shadow: 0 0 20px coral;
+            margin: 0 auto;
+        }
+
+        div.container div.inner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: coral;
+        }
+    </style>
+</head>
+<body>
+<div class="title-wrapper">
+    <h1>水平方向和垂直方向都居中的几种方法</h1>
+</div>
+
+
+<div class="center-1 general-size">
+    <em></em><span>hello world! </span>
+</div>
+
+<div class="center-2 general-size">
+    <span>hello world! </span>
+</div>
+
+<div class="btn-div">
+    <button id="btn">点击我增加字数</button>
+    <button id="reset-btn">点击我重置文字</button>
+</div>
+
+<div class="center-3 general-size">
+    <div class="inner">hello world</div>
+</div>
+
+<div class="center-4 general-size">
+    <div class="in">hello world</div>
+</div>
+
+<div class="table-cell-wrapper general-size">
+    <div class="center-5">
+        <div class="table-cell">
+            Delivering a statement to the Commons, the health secretary said "things will get worse before they get better".
+
+            "Now, I know that these measures are not easy but I also know that they are vital," Mr Hancock told MPs.
+
+            "Responding to this unprecedented pandemic requires difficult choices, some of the most difficult choices any
+            government has to make in peacetime."
+
+            Labour mayor Sadiq Khan told London's City Hall there was "simply no other option" to the new restrictions.
+
+            "Nobody wants to see more restrictions but this is deemed to be necessary in order to protect Londoners," he said.
+
+            Mr Khan said he is continuing to press the government for more financial support, adding that "we've got a
+            difficult winter ahead".
+
+            The London mayor also backed calls by Labour leader Sir Keir Starmer for a temporary national "circuit-breaker" to
+            stem the spread of the disease.
+        </div>
+    </div>
+</div>
+
+
+<!-- using flex -->
+<div class="center-6 general-size">
+    <div class="inner">hello world</div>
+</div>
+
+<div class="center-7 general-size">
+    <div class="inner">hello world</div>
+</div>
+
+
+<!-- 2d transform -->
+<div class="container">
+    <p>
+        US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies in the
+        critical election state of Florida.
+
+        Mr Biden told supporters: "You hold the power. If Florida goes blue [Democratic], it's over."
+
+        Celebrating soaring economic figures, Mr Trump, a Republican, said of his rival: "He's going to lock you down."
+
+        With just five days to go until election day, Mr Biden has a solid lead nationally in opinion polls.
+
+        But his advantage looks less assured in the battleground states, such as Florida, that will decide who ultimately wins
+        the White House.
+
+        More than 81 million people have already voted, 52 million of them by mail, setting the US on course for its highest
+        electoral turnout rate in more than a century.
+    </p>
+    <p>
+        Delivering a statement to the Commons, the health secretary said "things will get worse before they get better".
+
+        "Now, I know that these measures are not easy but I also know that they are vital," Mr Hancock told MPs.
+
+        "Responding to this unprecedented pandemic requires difficult choices, some of the most difficult choices any
+        government has to make in peacetime."
+
+        Labour mayor Sadiq Khan told London's City Hall there was "simply no other option" to the new restrictions.
+
+        "Nobody wants to see more restrictions but this is deemed to be necessary in order to protect Londoners," he said.
+
+        Mr Khan said he is continuing to press the government for more financial support, adding that "we've got a
+        difficult winter ahead".
+
+        The London mayor also backed calls by Labour leader Sir Keir Starmer for a temporary national "circuit-breaker" to
+        stem the spread of the disease.
+    </p>
+    <div class="inner">
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+        hello world US President Donald Trump and his Democratic White House challenger Joe Biden have held duelling rallies
+        in the
+    </div>
+</div>
+
+
+<script>
+    let btn = document.getElementById("btn");
+    let resetBtn = document.getElementById("reset-btn");
+    let span = document.getElementsByTagName("span")[0];
+
+
+    function addWords() {
+        span.innerHTML += span.innerHTML;
+    }
+
+    function reset() {
+        span.innerHTML = "hello world! ";
+    }
+
+    btn.onclick = addWords;
+    resetBtn.onclick = reset;
+</script>
+</body>
+</html>
